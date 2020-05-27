@@ -23,10 +23,17 @@ function addRandomQuote() {
       'I will come down on this hospital like the hammer of Thor. The thunder of my vengeance will echo through these corridors with the gust of a thousand winds!', 
       'Dee, I will slap you in the teeth.'];
 
-  // Pick a random greeting.
-  const quote = quotes[Math.floor(Math.random() * quotes.length)];
+  const quoteNum = Math.floor(Math.random() * quotes.length)
 
-  // Add it to the page.
+  // Pick a random quote and iamge.
+  const quote = quotes[quoteNum];
+  const imgUrl = 'images/sunny/IASIP-' + quoteNum + '.jpg';
+
+  const imgElement = document.createElement('img');
+  imgElement.src = imgUrl;
+
+  // Add them to the page.
   const quoteContainer = document.getElementById('quote-container');
   quoteContainer.innerText = quote;
+  quoteContainer.appendChild(imgElement);
 }

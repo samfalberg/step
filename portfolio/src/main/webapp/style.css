@@ -1,4 +1,6 @@
 #about {
+  display: inline-block;
+  margin-top: 30px;
   margin-left: 50px;
   margin-right: auto;
   width: 900px;
@@ -6,4 +8,13 @@
 
 #quote-container {
   margin-top: 20px;
+}
+
+#quote-generator {
+  display: inline-block;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: 50px;
+  margin-bottom: auto;
+  width: 900px;
 }
