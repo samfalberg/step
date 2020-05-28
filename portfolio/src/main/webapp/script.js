@@ -48,26 +48,9 @@ function catMood() {
     var moods = document.getElementById("moods");
     var moodSelected = moods.options[moods.selectedIndex].value
     
+    //Choose one of two images matching certain mood
     var imgNum = Math.floor(Math.random() * 2);
     var imgUrl = 'images/cats/' + moodSelected + '-' + imgNum + '.jpg';
-
-
-    // if (moodSelected == "distressed") {
-    //     var imgUrl = 'images/cats/distressed-' + imgNum + '.jpg';
-    // }
-    // else if (moodSelected == "elated") {
-    //     var imgUrl = 'images/cats/distressed-' + imgNum + '.jpg';
-    // }
-    // else if (moodSelected == "grumpy") {
-    //     var imgUrl = 'images/cats/distressed-' + imgNum + '.jpg';
-    // }
-    // else if (moodSelected == "melancholy") {
-    //     var imgUrl = 'images/cats/melancholy-' + imgNum + '.jpg';
-    // }
-    // else if (moodSelected == "indolent") {
-    //     var imgUrl = 'images/cats/indolent-' + imgNum + '.jpg';
-    // }
-
     var img = document.createElement('img');
     img.src = imgUrl;
     img.height = 500;
@@ -77,5 +60,4 @@ function catMood() {
     const imgContainer = document.getElementById('cat-moods-container');
     imgContainer.innerHTML = '';
     imgContainer.appendChild(img);
-    //document.write(imgUrl);
 }
