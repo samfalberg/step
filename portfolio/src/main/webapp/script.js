@@ -31,8 +31,8 @@ function addRandomQuote() {
 
     const imgElement = document.createElement('img');
     imgElement.src = imgUrl;
-    imgElement.height = 574;
-    imgElement.width = 1024;
+    imgElement.height = 504;
+    imgElement.width = 884;
 
     // Add them to the page.
     const quoteContainer = document.getElementById('quote-container');
@@ -58,6 +58,6 @@ function catMood() {
 
     //Add image to page, remove previous one
     const imgContainer = document.getElementById('cat-moods-container');
-    imgContainer.innerHTML = '';
+    imgContainer.innerHTML = '\n';
     imgContainer.appendChild(img);
 }

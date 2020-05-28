@@ -9,16 +9,16 @@
 }
 
 #quote-generator {
-  margin-left: 1000px;
-  margin-top: 60px;
+  margin-left: 1100px;
+  margin-top: 20px;
 }
 
 #cat-moods {
   margin-top: 20px;
-  margin-left: 50px
+  margin-left: 1100px
 }
 
 #cat-moods-container img {
     margin-top: 20px;
-    margin-left: 50px;
+    /* margin-left: 1100px; */
 }
