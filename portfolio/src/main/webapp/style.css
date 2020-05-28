@@ -1,8 +1,6 @@
 #about {
-  display: inline-block;
-  margin-top: 30px;
+  float: left;
   margin-left: 50px;
-  margin-right: auto;
   width: 900px;
 }
 
@@ -11,10 +9,10 @@
 }
 
 #quote-generator {
-  display: inline-block;
-  margin-top: 30px;
-  margin-left: auto;
-  margin-right: 50px;
-  margin-bottom: auto;
-  width: 900px;
+  margin-left: 1000px;
+  margin-top: 60px;
+}
+
+#cat-moods {
+    margin-top = 20px;
 }
