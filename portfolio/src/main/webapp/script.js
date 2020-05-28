@@ -17,11 +17,11 @@
  */
 function addRandomQuote() {
     const quotes =
-        ['Can I offer you a nice egg in this tryin\' time?', 
-        'Duct tape, zipties, and gloves; I have to have my tools!', 
-        'I\'ve got boxes full of Pepe!',
-        'I will come down on this hospital like the hammer of Thor. The thunder of my vengeance will echo through these corridors with the gust of a thousand winds!', 
-        'Dee, I will slap you in the teeth.'];
+        ['\"Can I offer you a nice egg in this tryin\' time?\"', 
+        '\"Duct tape, zipties, and gloves; I have to have my tools!\"', 
+        '\"I\'ve got boxes full of Pepe!\"',
+        '\"I will come down on this hospital like the hammer of Thor. The thunder of my vengeance will echo through these corridors with the gust of a thousand winds!\"', 
+        '\"Dee, I will slap you in the teeth.\"'];
 
     const quoteNum = Math.floor(Math.random() * quotes.length)
 
@@ -31,6 +31,8 @@ function addRandomQuote() {
 
     const imgElement = document.createElement('img');
     imgElement.src = imgUrl;
+    imgElement.height = 574;
+    imgElement.width = 1024;
 
     // Add them to the page.
     const quoteContainer = document.getElementById('quote-container');
@@ -44,28 +46,36 @@ function addRandomQuote() {
 function catMood() {
     //Get value of select dropdown
     var moods = document.getElementById("moods");
-    var moodSelected = moods.options[moods.selectedIndex].value;
+    var moodSelected = moods.options[moods.selectedIndex].value
+    
+    var imgNum = Math.floor(Math.random() * 2);
+    var imgUrl = 'images/cats/' + moodSelected + '-' + imgNum + '.jpg';
 
-    if (moodSelected == "distressed") {
-        var imgUrl = 'images/cats/distressed-0.jpg';
-    }
-    else if (moodSelected == "elated") {
-        
-    }
-    else if (moodSelected == "distressed") {
-        
-    }
-    else if (moodSelected == "melancholy") {
-        
-    }
-    else if (moodSelected == "indolent") {
-        
-    }
 
-    var imgElement = document.createElement('img');
-    imgElement.src = imgUrl;
+    // if (moodSelected == "distressed") {
+    //     var imgUrl = 'images/cats/distressed-' + imgNum + '.jpg';
+    // }
+    // else if (moodSelected == "elated") {
+    //     var imgUrl = 'images/cats/distressed-' + imgNum + '.jpg';
+    // }
+    // else if (moodSelected == "grumpy") {
+    //     var imgUrl = 'images/cats/distressed-' + imgNum + '.jpg';
+    // }
+    // else if (moodSelected == "melancholy") {
+    //     var imgUrl = 'images/cats/melancholy-' + imgNum + '.jpg';
+    // }
+    // else if (moodSelected == "indolent") {
+    //     var imgUrl = 'images/cats/indolent-' + imgNum + '.jpg';
+    // }
 
-    //Add image to page
-    var imgContainer = document.getElementById('cat-mood');
-    imgContainer.appendChild(imgElement);
+    var img = document.createElement('img');
+    img.src = imgUrl;
+    img.height = 500;
+    img.width = 350;
+
+    //Add image to page, remove previous one
+    const imgContainer = document.getElementById('cat-moods-container');
+    imgContainer.innerHTML = '';
+    imgContainer.appendChild(img);
+    //document.write(imgUrl);
 }

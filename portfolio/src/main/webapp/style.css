@@ -14,5 +14,11 @@
 }
 
 #cat-moods {
-    margin-top = 20px;
+  margin-top: 20px;
+  margin-left: 50px
+}
+
+#cat-moods-container img {
+    margin-top: 20px;
+    margin-left: 50px;
 }
