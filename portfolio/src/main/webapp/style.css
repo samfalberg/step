@@ -1,9 +1,18 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
+#about {
+  float: left;
+  margin-left: 50px;
   width: 900px;
 }
 
 #quote-container {
   margin-top: 20px;
+}
+
+#quote-generator {
+  margin-left: 1000px;
+  margin-top: 60px;
+}
+
+#cat-moods {
+    margin-top = 20px;
 }
