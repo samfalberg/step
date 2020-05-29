@@ -61,3 +61,11 @@ function catMood() {
     imgContainer.innerHTML = '\n';
     imgContainer.appendChild(img);
 }
+
+/*
+ * Blows a "hole" in the screen
+ */
+function blowUp() {
+    var explosion = document.getElementById("explosion");
+    explosion.play();
+}
