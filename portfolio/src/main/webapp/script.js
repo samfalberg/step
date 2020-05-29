@@ -66,6 +66,22 @@ function catMood() {
  * Blows a "hole" in the screen
  */
 function blowUp() {
-    var explosion = document.getElementById("explosion");
+    //Play explosion on click
+    var explosion = document.createElement('audio');
+    explosion.src = 'sounds/explosion.mp3';
     explosion.play();
+
+    var hole = document.createElement('img');
+    hole.src = 'images/hole/hole.png';
+    hole.width = 419;
+    hole.height = 319;
+    
+    //Add hole in wall, remove crack
+    const imgContainer = document.getElementById('site-crack');
+    imgContainer.innerHTML = '';
+    imgContainer.appendChild(hole);
+
+    //Add text
+    const textContainer = document.getElementById('text-container');
+    textContainer.innerText = "\nWhat the heck? You just blew up my website! Not cool...";    
 }
