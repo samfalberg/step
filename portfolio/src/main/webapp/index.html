@@ -2,53 +2,26 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Sam's Portfolio</title>
+    <title>Portfolio Home Page</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
+    <style>
+        body {
+            background-image: url('images/home-bg.jpg');
+        }
+    </style>
   </head>
   <body>
-      <div style="width: 100%; overflow: scroll">
-        <div id="about">
-            <h1>Sam Falberg's Portfolio Palooza</h1>
-            <p>My name is Sam and this is my portfolio. Here you will learn the ins and outs of my savage mind. However, if that seems unappealing, 
-                I have a wealth of cantankerous cat pictures sure to tickle your fancy.</p>
-            
-            <h2>About me</h2>
-            <p>I am currently studying computer science at the University of Colorado at Boulder. 
-                Two years ago, I attended the Computer Science Summer Institute in Chicago, where I helped build a webapp that lets the user search through a databse of charities.
-                However I'm pretty rusty with HTML and Javascript skills so I'm excited to be part of the STEP internship to get back into the swing of things.
-                <br>Here are some other facts about me:</p>
-                <ul>
-                    <li>I can play the drums, bass, and guitar</li>
-                    <li>I'm legally blind in my right eye</li>
-                    <li>I think spiders are cute</li>
-                </ul>    
-            
-            <p>When I was 4 years old, I called 911 on a payphone because I thought it wouldn't work without me putting any coins in. I was wrong. 
-                <br>I was at a public pool at the time and a police officer actually showed up. Luckily, this was right as I was leaving with my mom, so I was never caught. 
-                Sometimes I wonder if the cops are still looking for me.
-                <br>As I mentioned before, you may find this story boring. So, for suffering through it, here's a picture of a cat going through a rough patch in its life:</p>
-            <img src="/images/cats/emo-cat.jpg"/>
-        </div>
-
-        <div id="quote-generator">
-            <p>Click here to get a random quote from It's Always Sunny in Philadelphia:</p>
-        <button onclick="addRandomQuote()">Bird</button>
-        <div id="quote-container"></div>
-        </div>
-
-        <div id="cat-moods">
-            <h1>Choose your current mood and I'll show you a cat that matches it!</h1>
-            <label for="moods">Choose a mood:</label>
-            <select name="moods" id="moods">
-                <option value="grumpy">Grumpy</option>
-                <option value="melancholy">Melancholy</option>
-                <option value="elated">Elated</option>
-                <option value="distressed">Distressed</option>
-                <option value="indolent">Indolent</option>
-            </select>
-            <button onclick="catMood()">Submit</button>  
-        </div>
-      </div>    
+      <div id="home-title">
+        <h1>Sam Falberg's Portfolio Palooza</h1>
+      </div>
+      <div id="page-center">
+        <img style="float: left" src="/images/cats/laundry.gif" alt="gif"/>
+        <a href="./about.html" style="font-size: 40px">Click here to learn about me</a>
+        <img style="float: right" src="/images/cats/laundry.gif" alt="gif"/>
+      </div>
+      <div id="cool-math">
+        <p>Or, go play <a href="https://www.coolmathgames.com/" style="font-size: 40px" target="_blank">Cool Math Games</a> instead</p>
+      </div>
   </body>
 </html>
