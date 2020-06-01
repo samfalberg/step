@@ -22,11 +22,14 @@ function addRandomQuote() {
         '\"I\'ve got boxes full of Pepe!\"',
         '\"I will come down on this hospital like the hammer of Thor. The thunder of my vengeance will echo through these corridors with the gust of a thousand winds!\"', 
         '\"Dee, I will slap you in the teeth.\"'];
+    
+    var quotesNoRepeat = quotes;
 
-    const quoteNum = Math.floor(Math.random() * quotes.length)
+    const quoteNum = Math.floor(Math.random() * quotesNoRepeat.length)
 
     // Pick a random quote and iamge.
-    const quote = quotes[quoteNum];
+    const quote = quotesNoRepeat[quoteNum];
+    quotesNoRepeat.splice(quoteNum, 1);
     const imgUrl = 'images/sunny/IASIP-' + quoteNum + '.jpg';
 
     const imgElement = document.createElement('img');
@@ -84,4 +87,10 @@ function blowUp() {
     //Add text
     const textContainer = document.getElementById('text-container');
     textContainer.innerText = "\nWhat the heck? You just blew up my website! Not cool...";    
+}
+
+function hello() {
+    fetch('/data').then(response => response.text()).then((hello) => {
+    document.getElementById('hello-container').innerText = hello;
+  });
 }
