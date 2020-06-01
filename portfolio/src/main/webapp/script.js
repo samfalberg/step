@@ -96,7 +96,7 @@ function showMessages() {
     fetch('/data').then(response => response.text()).then((messages) => {
     
     const messageElement = document.getElementById('message-container');
-    messageElement.innerHTML = '';
+    messageElement.innerHTML = messages;
     console.log(messages);
   });
 }
