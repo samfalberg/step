@@ -89,8 +89,14 @@ function blowUp() {
     textContainer.innerText = "\nWhat the heck? You just blew up my website! Not cool...";    
 }
 
-function hello() {
-    fetch('/data').then(response => response.text()).then((hello) => {
-    document.getElementById('hello-container').innerText = hello;
+/**
+ * Fetches message from the server
+ */
+function showMessages() {
+    fetch('/data').then(response => response.text()).then((messages) => {
+    
+    const messageElement = document.getElementById('message-container');
+    messageElement.innerHTML = messages;
+    console.log(messages);
   });
 }

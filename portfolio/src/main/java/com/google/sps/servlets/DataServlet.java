@@ -19,6 +19,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import com.google.gson.Gson;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
@@ -26,9 +28,24 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String hello = "Oh, hello Sam!";
+    ArrayList<String> messages = new ArrayList<String>();
+    messages.add("Welcome to the only website on the internet");
+    messages.add("Buckle up, kiddos");
+    messages.add("Congratulations! If you are reading this, you know how to read.");
+
+    String json = convertToJson(messages);
     
-    response.setContentType("text/html;");
-    response.getWriter().println(hello);
+    //Send JSON as a response
+    response.setContentType("application/json;");
+    response.getWriter().println(json);
+  }
+
+  /**
+   * Converts messages ArrayList to JSON string using Gson
+   */
+  private String convertToJson(ArrayList<String> messages) {
+      Gson gson = new Gson();
+      String json = gson.toJson(messages);
+      return json;
   }
 }
