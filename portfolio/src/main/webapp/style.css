@@ -6,6 +6,10 @@
     font-size: 55px;
 }
 
+#hello-container {
+    margin-top: 10px;
+}
+
 #page-center {
     position: absolute;
     top:  50%;
