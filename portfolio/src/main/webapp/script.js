@@ -90,13 +90,11 @@ function blowUp() {
 }
 
 /**
- * Fetches message from the server
+ * Fetches comment from the server
  */
-function showMessages() {
-    fetch('/data').then(response => response.text()).then((messages) => {
-    
-    const messageElement = document.getElementById('message-container');
-    messageElement.innerHTML = messages;
-    console.log(messages);
+function showComments() {
+    fetch('/data').then(response => response.text()).then((comments) => {
+    document.getElementById('comment-container').innerHTML = comments;
+    console.log(comments);
   });
 }
