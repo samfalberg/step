@@ -32,6 +32,8 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  private int maxComments = 10;
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("Task").addSort("timestamp", SortDirection.DESCENDING);
@@ -40,6 +42,7 @@ public class DataServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     ArrayList<Comment> comments = new ArrayList<Comment>();
+    int count = 0;
     for (Entity entity : results.asIterable()) {
         long id = entity.getKey().getId();
         String message = (String) entity.getProperty("title");
@@ -47,13 +50,16 @@ public class DataServlet extends HttpServlet {
 
         Comment comment = new Comment(id, message, timestamp);
         comments.add(comment);
+        count++;
+        if (count == maxComments)
+            break;
     }
     
-    String gson = new Gson().toJson(comments);
+    String json = new Gson().toJson(comments);
     
     //Respond with message
     response.setContentType("application/json");
-    response.getWriter().println(gson);
+    response.getWriter().println(json);
   }
 
   @Override
@@ -61,6 +67,27 @@ public class DataServlet extends HttpServlet {
     //Get input from comment form
     String message = getParameter(request, "text-input", "");
     long timestamp = System.currentTimeMillis();
+
+    //Get input from num-comment form
+    String numComments = getParameter(request, "num-comments", "10");
+    
+    // Convert the input to an int.
+    int numCommentsToInt;
+    try {
+      numCommentsToInt = Integer.parseInt(numComments);
+    } catch (NumberFormatException e) {
+      response.setContentType("text/html");
+      response.getWriter().println("Please enter one of the nonnegative integers from the dropdown list");
+      return;
+    }
+    
+    //Check that input is nonnegative
+    if (numCommentsToInt < 0) {
+        numCommentsToInt = maxComments;
+    }
+
+    //Change maxComments to user input
+    maxComments = numCommentsToInt;
 
     Entity taskEntity = new Entity("Task");
     taskEntity.setProperty("message", message);
