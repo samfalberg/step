@@ -43,7 +43,6 @@ public class DataServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
     
     String json = new Gson().toJson(comments);
-
     //Respond with message
     response.setContentType("application/json");
     response.getWriter().println(json);
@@ -54,7 +53,6 @@ public class DataServlet extends HttpServlet {
     //Get input from comment form
     String comment = getParameter(request, "text-input", "");
     comments.add(comment);
-
     Entity taskEntity = new Entity("Task");
     taskEntity.setProperty("comment", comment);
 
