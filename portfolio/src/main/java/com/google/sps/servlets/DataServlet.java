@@ -28,15 +28,21 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    ArrayList<String> messages = new ArrayList<String>();
-    messages.add("Welcome to the only website on the internet");
-    messages.add("Buckle up, kiddos");
-    messages.add("Congratulations! If you are reading this, you know how to read.");
+    doPost(request, response);
+  }
 
-    String json = convertToJson(messages);
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    ArrayList<String> comments = new ArrayList<String>();
+
+    //Get input from comment form
+    String comment = getParameter(request, "text-input", "");
+    comments.add(comment);
+
+    String json = convertToJson(comments);
     
-    //Send JSON as a response
-    response.setContentType("application/json;");
+    //Respond with message
+    response.setContentType("application/json");
     response.getWriter().println(json);
   }
 
@@ -48,4 +54,16 @@ public class DataServlet extends HttpServlet {
       String json = gson.toJson(messages);
       return json;
   }
+
+  /**
+   * @return the request parameter, or the default value if the parameter
+   *         was not specified by the client
+   */
+   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+       String value = request.getParameter(name);
+       if (value == null) {
+           return defaultValue;
+       }
+       return value;
+   }
 }
