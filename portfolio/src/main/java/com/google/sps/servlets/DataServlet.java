@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Iterator;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -42,17 +43,15 @@ public class DataServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     ArrayList<Comment> comments = new ArrayList<Comment>();
-    int count = 0;
-    for (Entity entity : results.asIterable()) {
+    Iterator<Entity> iteration = results.asIterator();
+    for (int count = 0; count < maxComments; count++) {
+        Entity entity = iteration.next();
         long id = entity.getKey().getId();
-        String message = (String) entity.getProperty("title");
+        String message = (String) entity.getProperty("message");
         long timestamp = (long) entity.getProperty("timestamp");
 
         Comment comment = new Comment(id, message, timestamp);
         comments.add(comment);
-        count++;
-        if (count == maxComments)
-            break;
     }
     
     String json = new Gson().toJson(comments);
