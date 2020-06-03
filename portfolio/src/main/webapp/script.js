@@ -94,35 +94,53 @@ function blowUp() {
  */
 function showComments() {
     fetch('/data').then(response => response.json()).then((comments) => {
-    comments.forEach((comment) => {
-        document.getElementById('comment-container').appendChild(createComment(comment));
-    })
-    console.log(comments);
+        comments.forEach((comment) => {
+            document.getElementById('comment-container').appendChild(createComment(comment));
+        })
+        console.log(comments);
   });
 }
 
 /**
  * Displays comment message, timestamp, and id
  */
- function createComment(comment) {
+function createComment(comment) {
      //Box for each comment
-     var commentBox = document.createElement('div');
+     const commentBox = document.createElement('div');
      
      //Add id
-     var commentID = document.createElement('b');
+     const commentID = document.createElement('b');
      commentID.innerHTML = comment.id;
      
      //Add timestamp
-     var commentTimestamp = document.createElement('small');
+     const commentTimestamp = document.createElement('small');
      commentTimestamp.innerHTML = comment.timestamp
 
      //Add message
-     var commentMessage = document.createElement('p');
+     const commentMessage = document.createElement('p');
      commentMessage.innerHTML = comment.message;
+
+     const deleteButton = document.createElement('button');
+     deleteButton.innerText = 'Delete';
+     deleteButton.addEventListener('click', () => {
+         deleteComment(comment);
+
+         commentBox.remove();
+     })
 
      commentBox.appendChild(commentID);
      commentBox.appendChild(commentTimestamp);
      commentBox.appendChild(commentMessage);
+     commentBox.appendChild(deleteButton);
 
      return commentBox;
  }
+
+ /**
+  * Delete comments from the server
+  */
+function deleteComment(comment) {
+    const params = new URLSearchParams();
+    params.append('id', comment.id);
+    fetch('/delete-data', {method: 'POST', body: params});
+}
