@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Iterator;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -32,6 +33,8 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  private int maxComments = 5;
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("Task").addSort("timestamp", SortDirection.DESCENDING);
@@ -40,35 +43,63 @@ public class DataServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     ArrayList<Comment> comments = new ArrayList<Comment>();
-    for (Entity entity : results.asIterable()) {
+    Iterator<Entity> iteration = results.asIterator();
+    for (int count = 0; count < maxComments; count++) {
+        //Check if it can iterate any more to avoid NoSuchElementException
+        if (!iteration.hasNext())
+            break;
+        Entity entity = iteration.next();
+        
         long id = entity.getKey().getId();
-        String message = (String) entity.getProperty("title");
+        String message = (String) entity.getProperty("message");
         long timestamp = (long) entity.getProperty("timestamp");
 
         Comment comment = new Comment(id, message, timestamp);
         comments.add(comment);
     }
     
-    String gson = new Gson().toJson(comments);
+    String json = new Gson().toJson(comments);
     
     //Respond with message
     response.setContentType("application/json");
-    response.getWriter().println(gson);
+    response.getWriter().println(json);
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    //Get input from num-comment form
+    String numComments = getParameter(request, "num-comments", null);
+    
+    if (numComments != null) {
+        // Convert the input to an int.
+        int numCommentsToInt;
+        try {
+        numCommentsToInt = Integer.parseInt(numComments);
+        } catch (NumberFormatException e) {
+        response.setContentType("text/html");
+        response.getWriter().println("Please enter one of the nonnegative integers from the dropdown list");
+        return;
+        }
+
+        //Update maxComments if nonnegative
+        if (numCommentsToInt > 0) {
+            maxComments = numCommentsToInt;
+        }
+    }
+
     //Get input from comment form
-    String message = getParameter(request, "text-input", "");
+    String message = getParameter(request, "text-input", null);
     long timestamp = System.currentTimeMillis();
 
-    Entity taskEntity = new Entity("Task");
-    taskEntity.setProperty("message", message);
-    taskEntity.setProperty("timestamp", timestamp);
+    if (message != null) {
+        Entity taskEntity = new Entity("Task");
+        taskEntity.setProperty("message", message);
+        taskEntity.setProperty("timestamp", timestamp);
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(taskEntity);
-
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(taskEntity);
+    }
+ 
     response.sendRedirect("/about.html");
   }
 
