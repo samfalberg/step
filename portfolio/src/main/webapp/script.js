@@ -108,10 +108,10 @@ function createComment(comment) {
      //Box for each comment
      const commentBox = document.createElement('div');
      
-     //Add id
-     const commentID = document.createElement('b');
-     commentID.innerHTML = comment.id;
-     
+     //Add name
+     const commentName = document.createElement('b');
+     commentName.innerHTML = comment.name + "\n";
+
      //Add timestamp
      const commentTimestamp = document.createElement('small');
      commentTimestamp.innerHTML = comment.timestamp
@@ -128,7 +128,7 @@ function createComment(comment) {
          commentBox.remove();
      })
 
-     commentBox.appendChild(commentID);
+     commentBox.appendChild(commentName);
      commentBox.appendChild(commentTimestamp);
      commentBox.appendChild(commentMessage);
      commentBox.appendChild(deleteButton);
