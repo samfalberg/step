@@ -93,8 +93,36 @@ function blowUp() {
  * Fetches comment from the server
  */
 function showComments() {
-    fetch('/data').then(response => response.text()).then((comments) => {
-    document.getElementById('comment-container').innerHTML = comments;
+    fetch('/data').then(response => response.json()).then((comments) => {
+    comments.forEach((comment) => {
+        document.getElementById('comment-container').appendChild(createComment(comment));
+    })
     console.log(comments);
   });
 }
+
+/**
+ * Displays comment message, timestamp, and id
+ */
+ function createComment(comment) {
+     //Box for each comment
+     var commentBox = document.createElement('div');
+     
+     //Add id
+     var commentID = document.createElement('b');
+     commentID.innerHTML = comment.id;
+     
+     //Add timestamp
+     var commentTimestamp = document.createElement('small');
+     commentTimestamp.innerHTML = comment.timestamp
+
+     //Add message
+     var commentMessage = document.createElement('p');
+     commentMessage.innerHTML = comment.message;
+
+     commentBox.appendChild(commentID);
+     commentBox.appendChild(commentTimestamp);
+     commentBox.appendChild(commentMessage);
+
+     return commentBox;
+ }

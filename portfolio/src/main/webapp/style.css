@@ -6,10 +6,6 @@
     font-size: 55px;
 }
 
-#comment-container {
-    margin-top: 10px;
-}
-
 #page-center {
     position: absolute;
     top:  50%;
@@ -38,6 +34,10 @@
 
 #text-container {
     margin-top: 20px
+}
+
+#comment-container {
+    margin-top: 10px;
 }
 
 #quote-container {
