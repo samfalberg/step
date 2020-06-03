@@ -114,7 +114,7 @@ function createComment(comment) {
 
      //Add timestamp
      const commentTimestamp = document.createElement('small');
-     commentTimestamp.innerHTML = comment.timestamp
+     commentTimestamp.innerHTML = convertTime(comment.timestamp);
 
      //Add message
      const commentMessage = document.createElement('p');
@@ -135,6 +135,26 @@ function createComment(comment) {
 
      return commentBox;
  }
+
+ /**
+  * Converts millisecond timestamp into more readable MM/DD/YYYY format
+  */
+function convertTime(timestamp) {
+    var date = new Date(timestamp);
+    var month = date.getMonth();
+    var day = date.getDay();
+    var year = date.getFullYear();
+
+    //Append 0 before day and month if number is only 1 digit
+    if (month < 10) {
+        month = "0" + month;
+    }
+    if (day < 10) {
+        day = "0" + day;
+    }
+
+    return month + "/" + day + "/" + year;
+}
 
  /**
   * Delete comments from the server
