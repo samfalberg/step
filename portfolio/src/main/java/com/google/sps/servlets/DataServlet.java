@@ -46,8 +46,9 @@ public class DataServlet extends HttpServlet {
     Iterator<Entity> iteration = results.asIterator();
     for (int count = 0; count < maxComments; count++) {
         //Check if it can iterate any more to avoid NoSuchElementException
-        if (!iteration.hasNext())
+        if (!iteration.hasNext()) {
             break;
+        }
         Entity entity = iteration.next();
         
         long id = entity.getKey().getId();
