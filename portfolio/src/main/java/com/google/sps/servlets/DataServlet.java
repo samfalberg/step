@@ -45,7 +45,11 @@ public class DataServlet extends HttpServlet {
     ArrayList<Comment> comments = new ArrayList<Comment>();
     Iterator<Entity> iteration = results.asIterator();
     for (int count = 0; count < maxComments; count++) {
+        //Check if it can iterate any more to avoid NoSuchElementException
+        if (!iteration.hasNext())
+            break;
         Entity entity = iteration.next();
+        
         long id = entity.getKey().getId();
         String message = (String) entity.getProperty("message");
         long timestamp = (long) entity.getProperty("timestamp");
