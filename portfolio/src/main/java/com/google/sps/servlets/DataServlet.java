@@ -51,10 +51,11 @@ public class DataServlet extends HttpServlet {
         Entity entity = iteration.next();
         
         long id = entity.getKey().getId();
-        String message = (String) entity.getProperty("message");
         long timestamp = (long) entity.getProperty("timestamp");
+        String name = (String) entity.getProperty("name");
+        String message = (String) entity.getProperty("message");
 
-        Comment comment = new Comment(id, message, timestamp);
+        Comment comment = new Comment(id, timestamp, name, message);
         comments.add(comment);
     }
     
@@ -88,13 +89,15 @@ public class DataServlet extends HttpServlet {
     }
 
     //Get input from comment form
-    String message = getParameter(request, "text-input", null);
     long timestamp = System.currentTimeMillis();
+    String name = getParameter(request, "username", null);
+    String message = getParameter(request, "text-input", null);
 
-    if (message != null) {
+    if (message != null && name != null) {
         Entity taskEntity = new Entity("Task");
-        taskEntity.setProperty("message", message);
         taskEntity.setProperty("timestamp", timestamp);
+        taskEntity.setProperty("message", message);
+        taskEntity.setProperty("name", name);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(taskEntity);
