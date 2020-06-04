@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Optional;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -37,7 +38,7 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Task").addSort("timestamp", SortDirection.DESCENDING);
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
@@ -70,17 +71,17 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     //Get input from num-comment form
-    String numComments = getParameter(request, "num-comments", null);
+    String numComments = getParameter(request, "num-comments").orElse(null);
     
     if (numComments != null) {
         // Convert the input to an int.
         int numCommentsToInt;
         try {
-        numCommentsToInt = Integer.parseInt(numComments);
+          numCommentsToInt = Integer.parseInt(numComments);
         } catch (NumberFormatException e) {
-        response.setContentType("text/html");
-        response.getWriter().println("Please enter one of the nonnegative integers from the dropdown list");
-        return;
+          response.setContentType("text/html");
+          response.getWriter().println("Please enter one of the nonnegative integers from the dropdown list");
+          return;
         }
 
         //Update maxComments if nonnegative
@@ -91,17 +92,18 @@ public class DataServlet extends HttpServlet {
 
     //Get input from comment form
     long timestamp = System.currentTimeMillis();
-    String name = getParameter(request, "username", null);
-    String message = getParameter(request, "text-input", null);
-
-    if (message != null && name != null) {
-        Entity taskEntity = new Entity("Task");
-        taskEntity.setProperty("timestamp", timestamp);
-        taskEntity.setProperty("message", message);
-        taskEntity.setProperty("name", name);
+    String name = getParameter(request, "username").orElse("Anonymous User");
+    System.out.println(name);
+    String message = getParameter(request, "text-input").orElse(null);
+    
+    if (message != null) {
+        Entity commentEntity = new Entity("Comment");
+        commentEntity.setProperty("timestamp", timestamp);
+        commentEntity.setProperty("message", message);
+        commentEntity.setProperty("name", name);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        datastore.put(taskEntity);
+        datastore.put(commentEntity);
     }
  
     response.sendRedirect("/about.html");
@@ -111,11 +113,8 @@ public class DataServlet extends HttpServlet {
    * @return the request parameter, or the default value if the parameter
    *         was not specified by the client
    */
-   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+   private Optional<String> getParameter(HttpServletRequest request, String name) {
        String value = request.getParameter(name);
-       if (value == null) {
-           return defaultValue;
-       }
-       return value;
+       return Optional.ofNullable(value);
    }
 }
