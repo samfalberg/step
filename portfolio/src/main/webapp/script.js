@@ -107,6 +107,7 @@ function showComments() {
 function createComment(comment) {
      //Box for each comment
      const commentBox = document.createElement('div');
+     commentBox.className = 'comment'; 
      
      //Add name
      const commentName = document.createElement('b');
@@ -141,7 +142,7 @@ function createComment(comment) {
   */
 function convertTime(timestamp) {
     var date = new Date(timestamp);
-    var month = date.getMonth();
+    var month = date.getMonth() + 1;
     var day = date.getDay();
     var year = date.getFullYear();
 
