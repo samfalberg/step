@@ -56,8 +56,9 @@ public class DataServlet extends HttpServlet {
         long timestamp = (long) entity.getProperty("timestamp");
         String name = (String) entity.getProperty("name");
         String message = (String) entity.getProperty("message");
+        String mood = (String) entity.getProperty("mood");
 
-        Comment comment = new Comment(id, timestamp, name, message);
+        Comment comment = new Comment(id, timestamp, name, message, mood);
         comments.add(comment);
     }
     
@@ -89,32 +90,36 @@ public class DataServlet extends HttpServlet {
             maxComments = numCommentsToInt;
         }
     }
-
+    
     //Get input from comment form
     long timestamp = System.currentTimeMillis();
     String name = getParameter(request, "username").orElse("Anonymous User");
-    System.out.println(name);
     String message = getParameter(request, "text-input").orElse(null);
+    String mood = getParameter(request, "cat-mood").orElse(null);
     
     if (message != null) {
         Entity commentEntity = new Entity("Comment");
         commentEntity.setProperty("timestamp", timestamp);
         commentEntity.setProperty("message", message);
         commentEntity.setProperty("name", name);
+        commentEntity.setProperty("mood", mood);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(commentEntity);
     }
- 
+
     response.sendRedirect("/about.html");
   }
 
   /**
-   * @return the request parameter, or the default value if the parameter
-   *         was not specified by the client
+   * @return the Optional of the request parameter
    */
    private Optional<String> getParameter(HttpServletRequest request, String name) {
        String value = request.getParameter(name);
+       //return empty Optional if string is null or empty
+       if (value == null || value.isEmpty()) {
+           return Optional.empty();
+       }
        return Optional.ofNullable(value);
    }
 }
