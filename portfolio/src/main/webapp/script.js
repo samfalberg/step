@@ -130,8 +130,9 @@ function createComment(comment) {
      const commentTimestamp = document.createElement('small');
      commentTimestamp.innerHTML = convertTime(comment.timestamp).fontcolor('purple');
 
-     //Add message
+     //Add message, replacing new lines with HTML breaks
      const commentMessage = document.createElement('p');
+     //comment.message = comment.message.replace("↵", "<br>");
      commentMessage.innerHTML = comment.message;
 
      //Add delete button
