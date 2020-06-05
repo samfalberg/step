@@ -99,7 +99,7 @@ function showComments() {
             document.getElementById('comment-container').appendChild(createComment(comment));
         })
         console.log(comments);
-  });
+    });
 }
 
 /**
@@ -130,9 +130,8 @@ function createComment(comment) {
      const commentTimestamp = document.createElement('small');
      commentTimestamp.innerHTML = convertTime(comment.timestamp).fontcolor('purple');
 
-     //Add message, replacing new lines with HTML breaks
+     //Add message
      const commentMessage = document.createElement('p');
-     //comment.message = comment.message.replace("↵", "<br>");
      commentMessage.innerHTML = comment.message;
 
      //Add delete button
@@ -189,11 +188,23 @@ function deleteComment(comment) {
 function deleteAllComments() {
     fetch('/data').then(response => response.json()).then((comments) => {
         comments.forEach((comment) => {
-            console.log("Gonna delete " + comment.name + " comment");
+            //Delete from datastore
             deleteComment(comment);
 
+            //Delete from frontend
             var commentContainer = document.getElementById('comment-container');
             commentContainer.removeChild(commentContainer.lastElementChild);
         })
   });
+}
+
+/** 
+ * Load in 5 more comments
+ */
+function loadMoreComments() {
+    fetch('/data?load-more=5').then(response => response.json()).then((comments) => {
+        comments.forEach((comment) => {
+            document.getElementById('comment-container').appendChild(createComment(comment));
+        })
+    });
 }

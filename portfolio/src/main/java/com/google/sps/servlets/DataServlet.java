@@ -38,6 +38,15 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    //Get input from load more button
+    int loadMore = Integer.parseInt(getParameter(request, "load-more").orElse("0"));
+    System.out.println(loadMore);
+    
+    //Load 5 extra comments if pressed
+    if (loadMore != 0) {
+        maxComments += loadMore;
+    }   
+    
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
