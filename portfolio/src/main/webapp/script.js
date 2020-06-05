@@ -114,7 +114,6 @@ function createComment(comment) {
      const commentName = document.createElement('b');
      var resizedName = comment.name.fontsize(5);
      commentName.innerHTML = resizedName + " ";
-     console.log(comment.name);
 
      //Add mood if user chose one
      const commentMood = document.createElement('small'); 
@@ -189,7 +188,11 @@ function deleteComment(comment) {
 function deleteAllComments() {
     fetch('/data').then(response => response.json()).then((comments) => {
         comments.forEach((comment) => {
+            console.log("Gonna delete " + comment.name + " comment");
             deleteComment(comment);
+
+            var commentContainer = document.getElementById('comment-container');
+            commentContainer.removeChild(commentContainer.lastElementChild);
         })
   });
 }
