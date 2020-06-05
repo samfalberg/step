@@ -85,8 +85,9 @@ function blowUp() {
     imgContainer.appendChild(hole);
 
     //Add text
-    const textContainer = document.getElementById('text-container');
-    textContainer.innerText = "\nWhat the heck? You just blew up my website! Not cool...";    
+    const text = document.createElement('p');
+    text.innerText = "\nWhat the heck? You just blew up my website! Not cool...";  
+    imgContainer.appendChild(text);
 }
 
 /**
@@ -107,19 +108,34 @@ function showComments() {
 function createComment(comment) {
      //Box for each comment
      const commentBox = document.createElement('div');
-     
-     //Add id
-     const commentID = document.createElement('b');
-     commentID.innerHTML = comment.id;
-     
+     commentBox.className = 'comment'; 
+
+     //Add name
+     const commentName = document.createElement('b');
+     var resizedName = comment.name.fontsize(5);
+     commentName.innerHTML = resizedName + " ";
+     console.log(comment.name);
+
+     //Add mood if user chose one
+     const commentMood = document.createElement('small'); 
+     const commentImage = document.createElement('img');
+     if (comment.mood != "no-mood") {
+        commentMood.innerHTML = "is feeling " + comment.mood + "\t";
+        
+        //Add corresponding image
+        commentImage.className = 'comment-img';
+        commentImage.src = 'images/cats/' + comment.mood + '-0.jpg';
+     }
+
      //Add timestamp
      const commentTimestamp = document.createElement('small');
-     commentTimestamp.innerHTML = comment.timestamp
+     commentTimestamp.innerHTML = convertTime(comment.timestamp).fontcolor('purple');
 
      //Add message
      const commentMessage = document.createElement('p');
      commentMessage.innerHTML = comment.message;
 
+     //Add delete button
      const deleteButton = document.createElement('button');
      deleteButton.innerText = 'Delete';
      deleteButton.addEventListener('click', () => {
@@ -128,7 +144,9 @@ function createComment(comment) {
          commentBox.remove();
      })
 
-     commentBox.appendChild(commentID);
+     commentBox.appendChild(commentName);
+     commentBox.appendChild(commentMood);
+     commentBox.appendChild(commentImage);
      commentBox.appendChild(commentTimestamp);
      commentBox.appendChild(commentMessage);
      commentBox.appendChild(deleteButton);
@@ -137,10 +155,41 @@ function createComment(comment) {
  }
 
  /**
-  * Delete comments from the server
+  * Returns millisecond timestamp as converted MM/DD/YYYY format
+  */
+function convertTime(timestamp) {
+    var date = new Date(timestamp);
+    var month = date.getMonth() + 1;
+    var day = date.getDay();
+    var year = date.getFullYear();
+
+    //Append 0 before day and month if number is only 1 digit
+    if (month < 10) {
+        month = "0" + month;
+    }
+    if (day < 10) {
+        day = "0" + day;
+    }
+
+    return month + "/" + day + "/" + year;
+}
+
+ /**
+  * Delete a comment from the server
   */
 function deleteComment(comment) {
     const params = new URLSearchParams();
     params.append('id', comment.id);
     fetch('/delete-data', {method: 'POST', body: params});
+}
+
+ /**
+  * Delete every comment from the server
+  */
+function deleteAllComments() {
+    fetch('/data').then(response => response.json()).then((comments) => {
+        comments.forEach((comment) => {
+            deleteComment(comment);
+        })
+  });
 }

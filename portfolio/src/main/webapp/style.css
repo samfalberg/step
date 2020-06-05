@@ -23,21 +23,38 @@
 
 #about {
     float: left;
-    margin-left: 50px;
     width: 900px;
-    margin-top: 20px
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 20px;
 }
 
 #site-crack {
     margin-left: 20px;
 }
 
-#text-container {
-    margin-top: 20px
-}
-
 #comment-container {
     margin-top: 10px;
+}
+
+#insert-comment {
+    width: 79%;
+    height: 150px;
+    padding: 10px;
+    background-color: #DCDCDC;
+}
+
+.comment {
+    padding: 10px;
+    margin-top: 10px;
+    border: 3px dashed #8ebf42;
+    background-color: #FFC0CB;
+}
+
+.comment-img {
+    float: right;
+    width: 100px;
+    height: 100px;
 }
 
 #quote-container {

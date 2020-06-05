@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Optional;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -37,7 +38,7 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Task").addSort("timestamp", SortDirection.DESCENDING);
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
@@ -46,15 +47,18 @@ public class DataServlet extends HttpServlet {
     Iterator<Entity> iteration = results.asIterator();
     for (int count = 0; count < maxComments; count++) {
         //Check if it can iterate any more to avoid NoSuchElementException
-        if (!iteration.hasNext())
+        if (!iteration.hasNext()) {
             break;
+        }
         Entity entity = iteration.next();
         
         long id = entity.getKey().getId();
-        String message = (String) entity.getProperty("message");
         long timestamp = (long) entity.getProperty("timestamp");
+        String name = (String) entity.getProperty("name");
+        String message = (String) entity.getProperty("message");
+        String mood = (String) entity.getProperty("mood");
 
-        Comment comment = new Comment(id, message, timestamp);
+        Comment comment = new Comment(id, timestamp, name, message, mood);
         comments.add(comment);
     }
     
@@ -68,17 +72,17 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     //Get input from num-comment form
-    String numComments = getParameter(request, "num-comments", null);
+    String numComments = getParameter(request, "num-comments").orElse(null);
     
     if (numComments != null) {
         // Convert the input to an int.
         int numCommentsToInt;
         try {
-        numCommentsToInt = Integer.parseInt(numComments);
+          numCommentsToInt = Integer.parseInt(numComments);
         } catch (NumberFormatException e) {
-        response.setContentType("text/html");
-        response.getWriter().println("Please enter one of the nonnegative integers from the dropdown list");
-        return;
+          response.setContentType("text/html");
+          response.getWriter().println("Please enter one of the nonnegative integers from the dropdown list");
+          return;
         }
 
         //Update maxComments if nonnegative
@@ -86,32 +90,36 @@ public class DataServlet extends HttpServlet {
             maxComments = numCommentsToInt;
         }
     }
-
+    
     //Get input from comment form
-    String message = getParameter(request, "text-input", null);
     long timestamp = System.currentTimeMillis();
-
+    String name = getParameter(request, "username").orElse("Anonymous User");
+    String message = getParameter(request, "text-input").orElse(null);
+    String mood = getParameter(request, "cat-mood").orElse(null);
+    
     if (message != null) {
-        Entity taskEntity = new Entity("Task");
-        taskEntity.setProperty("message", message);
-        taskEntity.setProperty("timestamp", timestamp);
+        Entity commentEntity = new Entity("Comment");
+        commentEntity.setProperty("timestamp", timestamp);
+        commentEntity.setProperty("message", message);
+        commentEntity.setProperty("name", name);
+        commentEntity.setProperty("mood", mood);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        datastore.put(taskEntity);
+        datastore.put(commentEntity);
     }
- 
+
     response.sendRedirect("/about.html");
   }
 
   /**
-   * @return the request parameter, or the default value if the parameter
-   *         was not specified by the client
+   * @return the Optional of the request parameter
    */
-   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+   private Optional<String> getParameter(HttpServletRequest request, String name) {
        String value = request.getParameter(name);
-       if (value == null) {
-           return defaultValue;
+       //return empty Optional if string is null or empty
+       if (value == null || value.isEmpty()) {
+           return Optional.empty();
        }
-       return value;
+       return Optional.ofNullable(value);
    }
 }
