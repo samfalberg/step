@@ -85,8 +85,9 @@ function blowUp() {
     imgContainer.appendChild(hole);
 
     //Add text
-    const textContainer = document.getElementById('text-container');
-    textContainer.innerText = "\nWhat the heck? You just blew up my website! Not cool...";    
+    const text = document.createElement('p');
+    text.innerText = "\nWhat the heck? You just blew up my website! Not cool...";  
+    imgContainer.appendChild(text);
 }
 
 /**
@@ -113,6 +114,7 @@ function createComment(comment) {
      const commentName = document.createElement('b');
      var resizedName = comment.name.fontsize(5);
      commentName.innerHTML = resizedName + " ";
+     console.log(comment.name);
 
      //Add mood if user chose one
      const commentMood = document.createElement('small'); 
@@ -189,6 +191,5 @@ function deleteAllComments() {
         comments.forEach((comment) => {
             deleteComment(comment);
         })
-        console.log("The function ran");
   });
 }
