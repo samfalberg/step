@@ -49,6 +49,16 @@
                 <br>
                 <textarea name="text-input" id="insert-comment"></textarea>
                 <br>
+                <label for="cat-mood">How are you feeling right now?</label>
+                <select name="cat-mood">
+                    <option value="no-mood" selected></option>
+                    <option value="grumpy">Grumpy</option>
+                    <option value="melancholy">Melancholy</option>
+                    <option value="content">Content</option>
+                    <option value="distressed">Distressed</option>
+                    <option value="indolent">Indolent</option>
+                </select>
+                <br>
                 <input type="submit" />
                 <br><br>
             </form>
@@ -63,6 +73,10 @@
                 </select>
                 <br>
             </form>
+
+            <label for="delete-all">This button deletes every comment on the server! Use with caution...</label>
+            <button name="delete-all" onclick="deleteAllComments()">Clear all</button>
+            
             <div id="comment-container"></div>
         </div>
 
