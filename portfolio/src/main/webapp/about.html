@@ -41,9 +41,9 @@
 
             <form action="/data" method="POST">
                 <p>Leave a comment (but don't swear because if you do I'll tell your mom and you'll be in a whole heap of trouble, bub)</p>
-                <label for="username">Name:</label>   
+                <label for="username">Name (optional):</label>   
                 <br>          
-                <input type="text" name="username" style="background-color: #DCDCDC">
+                <input type="text" name="username" style="background-color: #DCDCDC" required>
                 <br><br>
                 <label for="text-input">Comment:</label>
                 <br>
@@ -58,7 +58,7 @@
                     <option value="distressed">Distressed</option>
                     <option value="indolent">Indolent</option>
                 </select>
-                <br>
+                <br><br>
                 <input type="submit" />
                 <br><br>
             </form>
@@ -71,11 +71,12 @@
                     <option value="25">25</option>
                     <option value="50">50</option>
                 </select>
-                <br>
+                <br><br>
             </form>
 
             <label for="delete-all">This button deletes every comment on the server! Use with caution...</label>
             <button name="delete-all" onclick="deleteAllComments()">Clear all</button>
+            <br><br>
             
             <div id="comment-container"></div>
         </div>
