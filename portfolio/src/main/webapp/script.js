@@ -186,16 +186,18 @@ function deleteComment(comment) {
   * Delete every comment from the server
   */
 function deleteAllComments() {
-    fetch('/data').then(response => response.json()).then((comments) => {
-        comments.forEach((comment) => {
-            //Delete from datastore
-            deleteComment(comment);
+    if (confirm("Are you sure you want to delete all these beautiful comments? They ain\'t comin\' back...") == true) {
+        fetch('/data').then(response => response.json()).then((comments) => {
+            comments.forEach((comment) => {
+                //Delete from datastore
+                deleteComment(comment);
 
-            //Delete from frontend
-            var commentContainer = document.getElementById('comment-container');
-            commentContainer.removeChild(commentContainer.lastElementChild);
-        })
-  });
+                //Delete from frontend
+                var commentContainer = document.getElementById('comment-container');
+                commentContainer.removeChild(commentContainer.lastElementChild);
+            })
+        });
+    }
 }
 
 /** 
