@@ -108,19 +108,32 @@ function createComment(comment) {
      //Box for each comment
      const commentBox = document.createElement('div');
      commentBox.className = 'comment'; 
-     
+
      //Add name
      const commentName = document.createElement('b');
-     commentName.innerHTML = comment.name + "\n";
+     var resizedName = comment.name.fontsize(5);
+     commentName.innerHTML = resizedName + " ";
+
+     //Add mood if user chose one
+     const commentMood = document.createElement('small'); 
+     const commentImage = document.createElement('img');
+     if (comment.mood != "no-mood") {
+        commentMood.innerHTML = "is feeling " + comment.mood + "\t";
+        
+        //Add corresponding image
+        commentImage.className = 'comment-img';
+        commentImage.src = 'images/cats/' + comment.mood + '-0.jpg';
+     }
 
      //Add timestamp
      const commentTimestamp = document.createElement('small');
-     commentTimestamp.innerHTML = convertTime(comment.timestamp);
+     commentTimestamp.innerHTML = convertTime(comment.timestamp).fontcolor('purple');
 
      //Add message
      const commentMessage = document.createElement('p');
      commentMessage.innerHTML = comment.message;
 
+     //Add delete button
      const deleteButton = document.createElement('button');
      deleteButton.innerText = 'Delete';
      deleteButton.addEventListener('click', () => {
@@ -130,6 +143,8 @@ function createComment(comment) {
      })
 
      commentBox.appendChild(commentName);
+     commentBox.appendChild(commentMood);
+     commentBox.appendChild(commentImage);
      commentBox.appendChild(commentTimestamp);
      commentBox.appendChild(commentMessage);
      commentBox.appendChild(deleteButton);
@@ -138,7 +153,7 @@ function createComment(comment) {
  }
 
  /**
-  * Converts millisecond timestamp into more readable MM/DD/YYYY format
+  * Returns millisecond timestamp as converted MM/DD/YYYY format
   */
 function convertTime(timestamp) {
     var date = new Date(timestamp);
@@ -158,10 +173,22 @@ function convertTime(timestamp) {
 }
 
  /**
-  * Delete comments from the server
+  * Delete a comment from the server
   */
 function deleteComment(comment) {
     const params = new URLSearchParams();
     params.append('id', comment.id);
     fetch('/delete-data', {method: 'POST', body: params});
+}
+
+ /**
+  * Delete every comment from the server
+  */
+function deleteAllComments() {
+    fetch('/data').then(response => response.json()).then((comments) => {
+        comments.forEach((comment) => {
+            deleteComment(comment);
+        })
+        console.log("The function ran");
+  });
 }
