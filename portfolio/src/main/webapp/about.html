@@ -39,7 +39,7 @@
                 <div id="text-container"></div>
             </div>
 
-            <form action="/data" method="POST">
+            <form action="/data" method="POST" enctype="multipart/form-data">
                 <h2>Leave a comment (but don't swear because if you do I'll tell your mom and you'll be in a whole heap of trouble, bub)</h2>
                 <label for="username">Name (optional):</label>   
                 <br>          
@@ -58,7 +58,7 @@
                     <option value="distressed">Distressed</option>
                     <option value="indolent">Indolent</option>
                 </select>
-                <p>Upload an image:</p>
+                <p>Upload an image (optional):</p>
                 <input type="file" name="image">
                 <br><br>
                 <input type="submit" />
