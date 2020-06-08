@@ -40,14 +40,14 @@
             </div>
 
             <form action="/data" method="POST">
-                <p>Leave a comment (but don't swear because if you do I'll tell your mom and you'll be in a whole heap of trouble, bub)</p>
+                <h2>Leave a comment (but don't swear because if you do I'll tell your mom and you'll be in a whole heap of trouble, bub)</h2>
                 <label for="username">Name (optional):</label>   
                 <br>          
-                <input type="text" name="username" style="background-color: #DCDCDC" required>
+                <input type="text" name="username" style="background-color: #DCDCDC">
                 <br><br>
                 <label for="text-input">Comment:</label>
                 <br>
-                <textarea name="text-input" id="insert-comment"></textarea>
+                <textarea name="text-input" id="insert-comment" required></textarea>
                 <br>
                 <label for="cat-mood">How are you feeling right now?</label>
                 <select name="cat-mood">
@@ -80,6 +80,11 @@
             <br><br>
             
             <div id="comment-container"></div>
+
+            <br><br>
+            <form action="/data" method="POST">
+                <button id="load-more" onclick="loadMoreComments()">Load more comments...</button>
+            </form>
         </div>
 
 

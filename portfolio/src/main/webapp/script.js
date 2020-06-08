@@ -99,7 +99,7 @@ function showComments() {
             document.getElementById('comment-container').appendChild(createComment(comment));
         })
         console.log(comments);
-  });
+    });
 }
 
 /**
@@ -114,7 +114,6 @@ function createComment(comment) {
      const commentName = document.createElement('b');
      var resizedName = comment.name.fontsize(5);
      commentName.innerHTML = resizedName + " ";
-     console.log(comment.name);
 
      //Add mood if user chose one
      const commentMood = document.createElement('small'); 
@@ -139,7 +138,12 @@ function createComment(comment) {
      const deleteButton = document.createElement('button');
      deleteButton.innerText = 'Delete';
      deleteButton.addEventListener('click', () => {
-         deleteComment(comment);
+         try {
+            deleteComment(comment);
+         }
+         catch(err) {
+            document.getElementById('comment-container').innerHTML = err.message;
+         }
 
          commentBox.remove();
      })
@@ -187,9 +191,32 @@ function deleteComment(comment) {
   * Delete every comment from the server
   */
 function deleteAllComments() {
-    fetch('/data').then(response => response.json()).then((comments) => {
+    if (confirm("Are you sure you want to delete all these beautiful comments? They ain\'t comin\' back...") == true) {
+        fetch('/data').then(response => response.json()).then((comments) => {
+            comments.forEach((comment) => {
+                //Delete from datastore, catch any errors
+                try {
+                    deleteComment(comment);
+                }
+                catch(err) {
+                    document.getElementById('comment-container').innerHTML = err.message;
+                }
+
+                //Delete from frontend
+                var commentContainer = document.getElementById('comment-container');
+                commentContainer.removeChild(commentContainer.lastElementChild);
+            })
+        });
+    }
+}
+
+/** 
+ * Load in 5 more comments
+ */
+function loadMoreComments() {
+    fetch('/data?load-more=5').then(response => response.json()).then((comments) => {
         comments.forEach((comment) => {
-            deleteComment(comment);
+            document.getElementById('comment-container').appendChild(createComment(comment));
         })
-  });
+    });
 }
