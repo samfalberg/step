@@ -91,6 +91,14 @@ function blowUp() {
 }
 
 /**
+ * Runs both showComments and fetchBlobstoreUrlAndShowForm on load
+ */
+function commentsAndImages() {
+    showComments();
+    fetchBlobstoreUrl();
+}
+
+/**
  * Fetches comment from the server
  */
 function showComments() {
@@ -219,4 +227,16 @@ function loadMoreComments() {
             document.getElementById('comment-container').appendChild(createComment(comment));
         })
     });
+}
+
+function fetchBlobstoreUrl() {
+  fetch('/blobstore-upload-url')
+      .then((response) => {
+        return response.text();
+      })
+      .then((imageUploadUrl) => {
+        const messageForm = document.getElementById('file-form');
+        messageForm.action = imageUploadUrl;
+        messageForm.classList.remove('hidden');
+      });
 }
