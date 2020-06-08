@@ -138,7 +138,12 @@ function createComment(comment) {
      const deleteButton = document.createElement('button');
      deleteButton.innerText = 'Delete';
      deleteButton.addEventListener('click', () => {
-         deleteComment(comment);
+         try {
+            deleteComment(comment);
+         }
+         catch(err) {
+            document.getElementById('comment-container').innerHTML = err.message;
+         }
 
          commentBox.remove();
      })
@@ -189,8 +194,13 @@ function deleteAllComments() {
     if (confirm("Are you sure you want to delete all these beautiful comments? They ain\'t comin\' back...") == true) {
         fetch('/data').then(response => response.json()).then((comments) => {
             comments.forEach((comment) => {
-                //Delete from datastore
-                deleteComment(comment);
+                //Delete from datastore, catch any errors
+                try {
+                    deleteComment(comment);
+                }
+                catch(err) {
+                    document.getElementById('comment-container').innerHTML = err.message;
+                }
 
                 //Delete from frontend
                 var commentContainer = document.getElementById('comment-container');
