@@ -38,15 +38,35 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    //Get input from num-comment form
+    String numComments = getParameter(request, "num-comments").orElse(null);
+    System.out.println("Number of comments to be shown: " + numComments);
+    
+    if (numComments != null) {
+        // Convert the input to an int.
+        int numCommentsToInt;
+        try {
+          numCommentsToInt = Integer.parseInt(numComments);
+        } catch (NumberFormatException e) {
+          response.setContentType("text/html");
+          response.getWriter().println("Please enter one of the nonnegative integers from the dropdown list");
+          return;
+        }
+
+        //Update maxComments if nonnegative
+        if (numCommentsToInt > 0) {
+            maxComments = numCommentsToInt;
+        }
+    }
+    
     //Get input from load more button
     int loadMore = Integer.parseInt(getParameter(request, "load-more").orElse("0"));
-    System.out.println(loadMore);
     
     //Load 5 extra comments if pressed
     if (loadMore != 0) {
         maxComments += loadMore;
     }   
-    
+
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -80,8 +100,9 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    //Get input from num-comment form
+     //Get input from num-comment form
     String numComments = getParameter(request, "num-comments").orElse(null);
+    System.out.println("Number of comments to be shown: " + numComments);
     
     if (numComments != null) {
         // Convert the input to an int.
