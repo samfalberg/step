@@ -130,7 +130,7 @@ function createComment(comment) {
         commentMood.innerHTML = "is feeling " + comment.mood + "\t";
         
         //Add corresponding image
-        commentMoodImage.className = 'comment-img';
+        commentMoodImage.className = 'comment-mood-img';
         commentMoodImage.src = 'images/cats/' + comment.mood + '-0.jpg';
      }
 
@@ -141,6 +141,12 @@ function createComment(comment) {
      //Add message
      const commentMessage = document.createElement('p');
      commentMessage.innerHTML = comment.message;
+
+     //Add user-submitted image
+     const commentImage = document.createElement('img');
+     if (comment.imageUrl != null) {
+        commentImage.src = comment.imageUrl;
+     }
 
      //Add delete button
      const deleteButton = document.createElement('button');
@@ -161,6 +167,7 @@ function createComment(comment) {
      commentBox.appendChild(commentMoodImage);
      commentBox.appendChild(commentTimestamp);
      commentBox.appendChild(commentMessage);
+     commentBox.appendChild(commentImage);
      commentBox.appendChild(deleteButton);
 
      return commentBox;
@@ -230,12 +237,12 @@ function loadMoreComments() {
 }
 
 function fetchBlobstoreUrl() {
-  fetch('/blobstore-upload-url')
+    fetch('/blobstore-upload-url')
       .then((response) => {
         return response.text();
       })
       .then((imageUploadUrl) => {
-        const messageForm = document.getElementById('file-form');
+        const messageForm = document.getElementById('comment-form');
         messageForm.action = imageUploadUrl;
         messageForm.classList.remove('hidden');
       });
