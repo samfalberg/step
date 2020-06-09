@@ -125,13 +125,13 @@ function createComment(comment) {
 
      //Add mood if user chose one
      const commentMood = document.createElement('small'); 
-     const commentImage = document.createElement('img');
+     const commentMoodImage = document.createElement('img');
      if (comment.mood != "no-mood") {
         commentMood.innerHTML = "is feeling " + comment.mood + "\t";
         
         //Add corresponding image
-        commentImage.className = 'comment-img';
-        commentImage.src = 'images/cats/' + comment.mood + '-0.jpg';
+        commentMoodImage.className = 'comment-img';
+        commentMoodImage.src = 'images/cats/' + comment.mood + '-0.jpg';
      }
 
      //Add timestamp
@@ -158,7 +158,7 @@ function createComment(comment) {
 
      commentBox.appendChild(commentName);
      commentBox.appendChild(commentMood);
-     commentBox.appendChild(commentImage);
+     commentBox.appendChild(commentMoodImage);
      commentBox.appendChild(commentTimestamp);
      commentBox.appendChild(commentMessage);
      commentBox.appendChild(deleteButton);
