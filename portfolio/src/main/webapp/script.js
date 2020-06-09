@@ -145,12 +145,14 @@ function createComment(comment) {
      //Add user-submitted image
      const commentImage = document.createElement('img');
      if (comment.imageUrl != null) {
+        commentImage.className = 'comment-img'
         commentImage.src = comment.imageUrl;
      }
 
      //Add delete button
      const deleteButton = document.createElement('button');
      deleteButton.innerText = 'Delete';
+     deleteButton.className = 'delete-button';
      deleteButton.addEventListener('click', () => {
          try {
             deleteComment(comment);
