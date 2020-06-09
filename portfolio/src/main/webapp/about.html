@@ -39,8 +39,8 @@
                 <div id="text-container"></div>
             </div>
 
-            <form action="/data" method="POST">
-                <h2>Leave a comment (but don't swear because if you do I'll tell your mom and you'll be in a whole heap of trouble, bub)</h2>
+            <form id="comment-form" method="POST" enctype="multipart/form-data" class="hidden">
+                <h2>Leave a comment</h2>
                 <label for="username">Name (optional):</label>   
                 <br>          
                 <input type="text" name="username" style="background-color: #DCDCDC">
@@ -57,7 +57,9 @@
                     <option value="content">Content</option>
                     <option value="distressed">Distressed</option>
                     <option value="indolent">Indolent</option>
-                </select>
+                </select>  
+                <p>Upload an image:</p>
+                <input type="file" name="image">
                 <br><br>
                 <input type="submit" />
                 <br><br>
@@ -86,12 +88,12 @@
                 <button id="load-more" onclick="loadMoreComments()">Load more comments...</button>
             </form>
 
-            <form id="file-form" class="hidden" method="POST" enctype="multipart/form-data">
+            <!-- <form id="file-form" class="hidden" method="POST" enctype="multipart/form-data">
                 <p>Upload an image:</p>
                 <input type="file" name="image">
                 <br/><br/>
                 <button>Submit</button>
-            </form>
+            </form> -->
         </div>
 
 
