@@ -154,7 +154,7 @@ public class DataServlet extends HttpServlet {
 
         // User submitted form without selecting a file, so we can't get a URL. (dev server)
         if (blobKeys == null || blobKeys.isEmpty()) {
-        return null;
+            return null;
         }
 
         // Our form only contains a single file input, so get the first index.
@@ -163,8 +163,8 @@ public class DataServlet extends HttpServlet {
         // User submitted form without selecting a file, so we can't get a URL. (live server)
         BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
         if (blobInfo.getSize() == 0) {
-        blobstoreService.delete(blobKey);
-        return null;
+            blobstoreService.delete(blobKey);
+            return null;
         }
 
         // We could check the validity of the file here, e.g. to make sure it's an image file
@@ -177,10 +177,10 @@ public class DataServlet extends HttpServlet {
         // To support running in Google Cloud Shell with AppEngine's dev server, we must use the relative
         // path to the image, rather than the path returned by imagesService which contains a host.
         try {
-        URL url = new URL(imagesService.getServingUrl(options));
-        return url.getPath();
+            URL url = new URL(imagesService.getServingUrl(options));
+            return url.getPath();
         } catch (MalformedURLException e) {
-        return imagesService.getServingUrl(options);
+            return imagesService.getServingUrl(options);
         }
   }
 }
