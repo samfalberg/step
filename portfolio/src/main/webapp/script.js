@@ -91,6 +91,14 @@ function blowUp() {
 }
 
 /**
+ * Runs both showComments and fetchBlobstoreUrlAndShowForm on load
+ */
+function commentsAndImages() {
+    showComments();
+    fetchBlobstoreUrl();
+}
+
+/**
  * Fetches comment from the server
  */
 function showComments() {
@@ -117,13 +125,13 @@ function createComment(comment) {
 
      //Add mood if user chose one
      const commentMood = document.createElement('small'); 
-     const commentImage = document.createElement('img');
+     const commentMoodImage = document.createElement('img');
      if (comment.mood != "no-mood") {
         commentMood.innerHTML = "is feeling " + comment.mood + "\t";
         
         //Add corresponding image
-        commentImage.className = 'comment-img';
-        commentImage.src = 'images/cats/' + comment.mood + '-0.jpg';
+        commentMoodImage.className = 'comment-mood-img';
+        commentMoodImage.src = 'images/cats/' + comment.mood + '-0.jpg';
      }
 
      //Add timestamp
@@ -134,9 +142,17 @@ function createComment(comment) {
      const commentMessage = document.createElement('p');
      commentMessage.innerHTML = comment.message;
 
+     //Add user-submitted image
+     const commentImage = document.createElement('img');
+     if (comment.imageUrl != null) {
+        commentImage.className = 'comment-img'
+        commentImage.src = comment.imageUrl;
+     }
+
      //Add delete button
      const deleteButton = document.createElement('button');
      deleteButton.innerText = 'Delete';
+     deleteButton.className = 'delete-button';
      deleteButton.addEventListener('click', () => {
          try {
             deleteComment(comment);
@@ -150,9 +166,10 @@ function createComment(comment) {
 
      commentBox.appendChild(commentName);
      commentBox.appendChild(commentMood);
-     commentBox.appendChild(commentImage);
+     commentBox.appendChild(commentMoodImage);
      commentBox.appendChild(commentTimestamp);
      commentBox.appendChild(commentMessage);
+     commentBox.appendChild(commentImage);
      commentBox.appendChild(deleteButton);
 
      return commentBox;
@@ -219,4 +236,16 @@ function loadMoreComments() {
             document.getElementById('comment-container').appendChild(createComment(comment));
         })
     });
+}
+
+function fetchBlobstoreUrl() {
+    fetch('/blobstore-upload-url')
+      .then((response) => {
+        return response.text();
+      })
+      .then((imageUploadUrl) => {
+        const messageForm = document.getElementById('comment-form');
+        messageForm.action = imageUploadUrl;
+        messageForm.classList.remove('hidden');
+      });
 }

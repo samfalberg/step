@@ -50,13 +50,23 @@
     border: 3px dashed #8ebf42;
     background-color: #FFC0CB;
     word-wrap: break-word;
+    white-space: pre-wrap;
 }
 
-.comment-img {
+.comment-mood-img {
     float: right;
     width: 100px;
     height: 100px;
 }
+
+ .comment-img {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.delete-button {
+    display: block;
+} 
 
 #quote-container {
     margin-top: 20px;

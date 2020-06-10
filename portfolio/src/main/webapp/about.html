@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body onload="showComments()">
+  <body onload="commentsAndImages()">
       <div style="width: 100%; overflow: scroll">
         <a href="./index.html">Home Page</a>
         <div id="about">
@@ -39,7 +39,7 @@
                 <div id="text-container"></div>
             </div>
 
-            <form action="/data" method="POST">
+            <form id="comment-form" method="POST" enctype="multipart/form-data" class="hidden">
                 <h2>Leave a comment (but don't swear because if you do I'll tell your mom and you'll be in a whole heap of trouble, bub)</h2>
                 <label for="username">Name (optional):</label>   
                 <br>          
@@ -57,7 +57,9 @@
                     <option value="content">Content</option>
                     <option value="distressed">Distressed</option>
                     <option value="indolent">Indolent</option>
-                </select>
+                </select>  
+                <p>Upload an image:</p>
+                <input type="file" name="image">
                 <br><br>
                 <input type="submit" />
                 <br><br>
