@@ -78,9 +78,8 @@ function blowUp() {
     explosion.play();
 
     var hole = document.createElement('img');
+    hole.className = 'crack-image';
     hole.src = 'images/hole/hole.png';
-    hole.width = 419;
-    hole.height = 319;
     
     //Add hole in wall, remove crack
     const imgContainer = document.getElementById('site-crack');
@@ -89,7 +88,8 @@ function blowUp() {
 
     //Add text
     const text = document.createElement('p');
-    text.innerText = "\nWhat the heck? You just blew up my website! Not cool...";  
+    text.className = 'crack-text';
+    text.innerHTML = "\nWhat the heck? You just blew up my website! Not cool...";  
     imgContainer.appendChild(text);
 }
 

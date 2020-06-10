@@ -28,9 +28,20 @@
     padding: 10px;
 }
 
+#about-body {
+    background-color: greenyellow;
+}
+
 #about {
     width: 1000px;
     margin: auto;
+    padding: 15px;
+}
+
+#info {
+    background-color: white;
+    border: 3px solid blue;
+    padding: 10px;
 }
 
 #quote-container {
@@ -39,6 +50,9 @@
 
 #quote-generator {
     margin-top: 20px;
+    border: 3px solid blue;
+    background-color: white;
+    padding-bottom: 10px;
 }
 
 .quote-element {
@@ -57,6 +71,9 @@
 
 #cat-moods {
     margin-top: 20px;
+    border: 3px solid blue;
+    background-color: white;
+    padding-bottom: 10px;
 }
 
 #cat-moods-container img {
@@ -73,6 +90,19 @@
 
 #site-crack {
     margin-top: 30px;
+}
+
+.crack-image {
+    width: 419px;
+    height: 319px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.crack-text {
+    text-align: center;
+    font: 20px "Trebuchet MS", Helvetica, sans-serif;
 }
 
 #comment-container {

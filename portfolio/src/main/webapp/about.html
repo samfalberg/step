@@ -6,36 +6,38 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body onload="commentsAndImages()">
+  <body onload="commentsAndImages()" id="about-body" >
+    <a href="./index.html"><p style="text-align:center">Home Page</p></a>
     <div id="about">
-        <a href="./index.html"><p style="text-align:center">Home Page</p></a>
-        <h1>Welcome!</h1>
-        <p>My name is Sam and this is my portfolio. Here you will learn the ins and outs of my savage mind. However, if that seems unappealing, 
-            I have a wealth of cantankerous cat pictures sure to tickle your fancy.</p>
-        
-        <h2>About me</h2>
-        <p>I am currently studying computer science at the University of Colorado at Boulder. 
-            Two years ago, I attended the Computer Science Summer Institute in Chicago, where I helped build a webapp that lets the user search through a database of charities.
-            However I'm pretty rusty with HTML and Javascript skills so I'm excited to be part of the STEP internship to get back into the swing of things.
-            <br>Here are some other facts about me:</p>
-            <ul>
-                <li>I can play the drums, bass, and guitar</li>
-                <li>I'm legally blind in my right eye</li>
-                <li>I think spiders are cute</li>
-            </ul>    
-        
-        <p>When I was 4 years old, I called 911 on a payphone because I thought it wouldn't work without me putting any coins in. I was wrong. 
-            <br>I was at a public pool at the time and a police officer actually showed up. Luckily, this was right as I was leaving with my mom, so I was never caught. 
-            Sometimes I wonder if the cops are still looking for me.
-            <br>As I mentioned before, you may find this story boring. So, for suffering through it, here's a picture of a cat going through a rough patch in its life:</p>
-        <img src="/images/cats/emo-cat.jpg" width=250 height=187.5>
-        
-        <h2>Contact me:</h2>
-        <p>Personal email: samuelfalberg@gmail.com
-            <br><a href="https://github.com/samfalberg" target="_blank">Github</a></p>
+        <div id="info">
+            <h1>Welcome!</h1>
+            <p>My name is Sam and this is my portfolio. Here you will learn the ins and outs of my savage mind. However, if that seems unappealing, 
+                I have a wealth of cantankerous cat pictures sure to tickle your fancy.</p>
+            
+            <h2>About me</h2>
+            <p>I am currently studying computer science at the University of Colorado at Boulder. 
+                Two years ago, I attended the Computer Science Summer Institute in Chicago, where I helped build a webapp that lets the user search through a database of charities.
+                However I'm pretty rusty with HTML and Javascript skills so I'm excited to be part of the STEP internship to get back into the swing of things.
+                <br>Here are some other facts about me:</p>
+                <ul>
+                    <li>I can play the drums, bass, and guitar</li>
+                    <li>I'm legally blind in my right eye</li>
+                    <li>I think spiders are cute</li>
+                </ul>    
+            
+            <p>When I was 4 years old, I called 911 on a payphone because I thought it wouldn't work without me putting any coins in. I was wrong. 
+                <br>I was at a public pool at the time and a police officer actually showed up. Luckily, this was right as I was leaving with my mom, so I was never caught. 
+                Sometimes I wonder if the cops are still looking for me.
+                <br>As I mentioned before, you may find this story boring. So, for suffering through it, here's a picture of a cat going through a rough patch in its life:</p>
+            <img src="/images/cats/emo-cat.jpg" width=250 height=187.5>
+            
+            <h2>Contact me:</h2>
+            <p>Personal email: samuelfalberg@gmail.com
+                <br><a href="https://github.com/samfalberg" target="_blank">Github</a></p>
+        </div>
 
         <div id="quote-generator">
-            <h1>Push the button to get a random quote from It's Always Sunny in Philadelphia:</h1>
+            <h1 style="text-align: center">Push the button to get a random quote from It's Always Sunny in Philadelphia:</h1>
             <p style="text-align: center"><button onclick="addRandomQuote()">Bird</button></p>
             <div id="quote-container">
                 <img src="/images/blank.png" class="sunny-image">
@@ -43,7 +45,7 @@
         </div>
 
         <div id="cat-moods">
-            <h1>Choose your current mood and I'll show you a cat that matches it!</h1>
+            <h1 style="text-align: center">Choose your current mood and I'll show you a cat that matches it!</h1>
             <p style="text-align: center"><label for="moods">Choose a mood:</label>
             <select name="moods" id="moods">
                 <option value="grumpy">Grumpy</option>
@@ -59,11 +61,11 @@
         </div>  
 
         <div id="site-crack">
-            <img src="/images/hole/crack.jpg" onclick=blowUp() style="transform: rotate(90deg)">
+            <img src="/images/hole/crack.jpg" onclick=blowUp() style="transform: rotate(90deg)" class="crack-image">
         </div>
 
         <form id="comment-form" method="POST" enctype="multipart/form-data" class="hidden">
-            <h2>Leave a comment (but don't swear because if you do I'll tell your mom and you'll be in a whole heap of trouble, bub)</h2>
+            <h2 style="text-align: center">Leave a comment (but don't swear because if you do I'll tell your mom and you'll be in a whole heap of trouble, bub)</h2>
             <label for="username">Name (optional):</label>   
             <br>          
             <input type="text" name="username" style="background-color: #DCDCDC">
