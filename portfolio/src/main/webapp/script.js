@@ -51,9 +51,8 @@ function catMood() {
     var moods = document.getElementById("moods");
     var moodSelected = moods.options[moods.selectedIndex].value
     
-    //Choose one of two images matching certain mood
-    var imgNum = Math.floor(Math.random() * 2);
-    var imgUrl = 'images/cats/' + moodSelected + '-' + imgNum + '.jpg';
+    //Choose the corresponding cat mood
+    var imgUrl = 'images/cats/' + moodSelected + '-1.jpg';
     var img = document.createElement('img');
     img.src = imgUrl;
     img.height = 500;
