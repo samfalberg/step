@@ -32,14 +32,19 @@ function addRandomQuote() {
     quotesNoRepeat.splice(quoteNum, 1);
     const imgUrl = 'images/sunny/IASIP-' + quoteNum + '.jpg';
 
+    const quoteElement = document.createElement('p');
+    quoteElement.className = 'quote-element';
+    quoteElement.innerHTML = quote + "\n";
+
     const imgElement = document.createElement('img');
+    imgElement.className = 'sunny-image';
     imgElement.src = imgUrl;
-    imgElement.height = 504;
-    imgElement.width = 884;
+    
 
     // Add them to the page.
     const quoteContainer = document.getElementById('quote-container');
-    quoteContainer.innerText = quote + "\n";
+    quoteContainer.innerHTML = '';
+    quoteContainer.appendChild(quoteElement);
     quoteContainer.appendChild(imgElement);
 }
 
@@ -54,9 +59,8 @@ function catMood() {
     //Choose the corresponding cat mood
     var imgUrl = 'images/cats/' + moodSelected + '-1.jpg';
     var img = document.createElement('img');
+    img.className = 'cat-image';
     img.src = imgUrl;
-    img.height = 500;
-    img.width = 350;
 
     //Add image to page, remove previous one
     const imgContainer = document.getElementById('cat-moods-container');
