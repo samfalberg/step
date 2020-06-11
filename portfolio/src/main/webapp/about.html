@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body onload="showComments(), fetchBlobstoreUrl()">
+  <body onload="showComments(), fetchBlobstoreUrl(), fetchLoginStatus()">
       <div style="width: 100%; overflow: scroll">
         <a href="./index.html">Home Page</a>
         <div id="about">
@@ -37,7 +37,9 @@
             <div id="site-crack">
                 <img src="/images/hole/crack.jpg" onclick=blowUp() style="transform: rotate(90deg)">
                 <div id="text-container"></div>
+                <br>
             </div>
+
             <div id="all-comment-options" style="display:none"> 
                 <form id="comment-form" method="POST" enctype="multipart/form-data" class="hidden">
                     <h2>Leave a comment (but don't swear because if you do I'll tell your mom and you'll be in a whole heap of trouble, bub)</h2>
@@ -79,9 +81,14 @@
 
                 <label for="delete-all">This button deletes every comment on the server! Use with caution...</label>
                 <button name="delete-all" onclick="deleteAllComments()">Clear all</button>
-                <br><br>
+                <br>
+
+                <p>Think I'm gonna steal your info? Logout <a id="logout-url">here</a></p>
+                <br>
             </div>
             
+            <p id="login-form" style="display:none">Wanna post a comment? Login <a id="login-url">here</a></p>
+
             <div id="comment-container"></div>
 
             <br><br>
