@@ -41,6 +41,8 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
@@ -112,9 +114,12 @@ public class DataServlet extends HttpServlet {
         }
     }
     
+    UserService userService = UserServiceFactory.getUserService();
+
     //Get input from comment form
     long timestamp = System.currentTimeMillis();
-    String name = getParameter(request, "username").orElse("Anonymous User");
+    //String name = getParameter(request, "username").orElse("Anonymous User");
+    String name = userService.getCurrentUser().getEmail();
     String message = getParameter(request, "text-input").orElse(null);
     String mood = getParameter(request, "cat-mood").orElse(null);
     String imageUrl = getUploadedFileUrl(request, "image");
