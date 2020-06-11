@@ -141,28 +141,30 @@ function createComment(comment) {
         commentImage.src = comment.imageUrl;
      }
 
-     //Add delete button
-     const deleteButton = document.createElement('button');
-     deleteButton.innerText = 'Delete';
-     deleteButton.className = 'delete-button';
-     deleteButton.addEventListener('click', () => {
-         try {
-            deleteComment(comment);
-         }
-         catch(err) {
-            document.getElementById('comment-container').innerHTML = err.message;
-         }
-
-         commentBox.remove();
-     })
-
      commentBox.appendChild(commentName);
      commentBox.appendChild(commentMood);
      commentBox.appendChild(commentMoodImage);
      commentBox.appendChild(commentTimestamp);
      commentBox.appendChild(commentMessage);
      commentBox.appendChild(commentImage);
-     commentBox.appendChild(deleteButton);
+
+     //Add delete button if comment belongs to user
+     if (comment.myComment) {
+        const deleteButton = document.createElement('button');
+        deleteButton.innerText = 'Delete';
+        deleteButton.className = 'delete-button';
+        deleteButton.addEventListener('click', () => {
+            try {
+                deleteComment(comment);
+            }
+            catch(err) {
+                document.getElementById('comment-container').innerHTML = err.message;
+            }
+
+            commentBox.remove();
+        })
+        commentBox.appendChild(deleteButton);
+     }
 
      return commentBox;
  }
