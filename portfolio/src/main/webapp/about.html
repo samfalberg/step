@@ -38,48 +38,49 @@
                 <img src="/images/hole/crack.jpg" onclick=blowUp() style="transform: rotate(90deg)">
                 <div id="text-container"></div>
             </div>
+            <div id="all-comment-options" style="display:none"> 
+                <form id="comment-form" method="POST" enctype="multipart/form-data" class="hidden">
+                    <h2>Leave a comment (but don't swear because if you do I'll tell your mom and you'll be in a whole heap of trouble, bub)</h2>
+                    <label for="username">Name (optional):</label>   
+                    <br>          
+                    <input type="text" name="username" style="background-color: #DCDCDC">
+                    <br><br>
+                    <label for="text-input">Comment:</label>
+                    <br>
+                    <textarea name="text-input" id="insert-comment" required></textarea>
+                    <br>
+                    <label for="cat-mood">How are you feeling right now?</label>
+                    <select name="cat-mood">
+                        <option value="no-mood" selected></option>
+                        <option value="grumpy">Grumpy</option>
+                        <option value="melancholy">Melancholy</option>
+                        <option value="content">Content</option>
+                        <option value="distressed">Distressed</option>
+                        <option value="indolent">Indolent</option>
+                    </select>  
+                    <p>Upload an image:</p>
+                    <input type="file" name="image">
+                    <br><br>
+                    <input type="submit" />
+                    <br><br>
+                </form>
 
-            <form id="comment-form" method="POST" enctype="multipart/form-data" class="hidden">
-                <h2>Leave a comment (but don't swear because if you do I'll tell your mom and you'll be in a whole heap of trouble, bub)</h2>
-                <label for="username">Name (optional):</label>   
-                <br>          
-                <input type="text" name="username" style="background-color: #DCDCDC">
-                <br><br>
-                <label for="text-input">Comment:</label>
-                <br>
-                <textarea name="text-input" id="insert-comment" required></textarea>
-                <br>
-                <label for="cat-mood">How are you feeling right now?</label>
-                <select name="cat-mood">
-                    <option value="no-mood" selected></option>
-                    <option value="grumpy">Grumpy</option>
-                    <option value="melancholy">Melancholy</option>
-                    <option value="content">Content</option>
-                    <option value="distressed">Distressed</option>
-                    <option value="indolent">Indolent</option>
-                </select>  
-                <p>Upload an image:</p>
-                <input type="file" name="image">
-                <br><br>
-                <input type="submit" />
-                <br><br>
-            </form>
+                <form action="/data" method="POST">
+                    <label for="num-comments">Number of comments:</label>
+                    <select name="num-comments" id="num-comments" onchange="this.form.submit()">
+                        <option value="default" selected></option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+                    <br><br>
+                </form>
 
-            <form action="/data" method="POST">
-                <label for="num-comments">Number of comments:</label>
-                <select name="num-comments" id="num-comments" onchange="this.form.submit()">
-                    <option value="default" selected></option>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                </select>
+                <label for="delete-all">This button deletes every comment on the server! Use with caution...</label>
+                <button name="delete-all" onclick="deleteAllComments()">Clear all</button>
                 <br><br>
-            </form>
-
-            <label for="delete-all">This button deletes every comment on the server! Use with caution...</label>
-            <button name="delete-all" onclick="deleteAllComments()">Clear all</button>
-            <br><br>
+            </div>
             
             <div id="comment-container"></div>
 
