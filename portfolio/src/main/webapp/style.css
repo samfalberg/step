@@ -14,23 +14,95 @@
     background-color: pink;
 }
 
+#about-link {
+    font-size: 40px;
+    text-align: center;
+    vertical-align: middle;
+}
+
 #cool-math {
     position: fixed;
     text-align: center;
     background-color: pink;
     bottom: 0px;
+    padding: 10px;
+}
+
+#about-body {
+    background-color: greenyellow;
 }
 
 #about {
-    float: left;
-    width: 900px;
-    margin-left: 50px;
-    margin-right: 50px;
+    width: 1000px;
+    margin: auto;
+    padding: 15px;
+}
+
+#info {
+    background-color: white;
+    border: 3px solid blue;
+    padding: 10px;
+}
+
+#quote-container {
     margin-top: 20px;
 }
 
+#quote-generator {
+    margin-top: 20px;
+    border: 3px solid blue;
+    background-color: white;
+    padding-bottom: 10px;
+}
+
+.quote-element {
+    text-align: center;
+    font: 20px "Trebuchet MS", Helvetica, sans-serif;
+    color: red;
+}
+
+.sunny-image {
+    height: 504px;
+    width: 884px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#cat-moods {
+    margin-top: 20px;
+    border: 3px solid blue;
+    background-color: white;
+    padding-bottom: 10px;
+}
+
+#cat-moods-container img {
+    margin-top: 20px;
+}
+
+.cat-image {
+    height: 500px;
+    width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
 #site-crack {
-    margin-left: 20px;
+    margin-top: 30px;
+}
+
+.crack-image {
+    width: 419px;
+    height: 319px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.crack-text {
+    text-align: center;
+    font: 20px "Trebuchet MS", Helvetica, sans-serif;
 }
 
 #comment-container {
@@ -67,23 +139,3 @@
 .delete-button {
     display: block;
 } 
-
-#quote-container {
-    margin-top: 20px;
-}
-
-#quote-generator {
-    margin-left: 1100px;
-    margin-top: 20px;
-}
-
-#cat-moods {
-    margin-top: 20px;
-    margin-left: 1100px;
-    position: absolute;
-}
-
-#cat-moods-container img {
-    position: absolute;
-    margin-top: 20px;
-}

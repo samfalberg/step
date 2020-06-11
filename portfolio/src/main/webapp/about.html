@@ -7,9 +7,9 @@
     <script src="script.js"></script>
   </head>
   <body onload="showComments(), fetchBlobstoreUrl(), fetchLoginStatus()">
-      <div style="width: 100%; overflow: scroll">
-        <a href="./index.html">Home Page</a>
-        <div id="about">
+    <a href="./index.html"><p style="text-align:center">Home Page</p></a>
+    <div id="about">
+        <div id="info">
             <h1>Welcome!</h1>
             <p>My name is Sam and this is my portfolio. Here you will learn the ins and outs of my savage mind. However, if that seems unappealing, 
                 I have a wealth of cantankerous cat pictures sure to tickle your fancy.</p>
@@ -32,8 +32,9 @@
             <img src="/images/cats/emo-cat.jpg" width=250 height=187.5>
             
             <h2>Contact me:</h2>
-            <p>Personal email: sfalberg@google.com
+            <p>Personal email: samuelfalberg@gmail.com
                 <br><a href="https://github.com/samfalberg" target="_blank">Github</a></p>
+          
             <div id="site-crack">
                 <img src="/images/hole/crack.jpg" onclick=blowUp() style="transform: rotate(90deg)">
                 <div id="text-container"></div>
@@ -97,17 +98,17 @@
             </form>
         </div>
 
-
         <div id="quote-generator">
-            <h1>Push the button to get a random quote from It's Always Sunny in Philadelphia:</h1>
-        <button onclick="addRandomQuote()">Bird</button>
-        <div id="quote-container"></div>
+            <h1 style="text-align: center">Push the button to get a random quote from It's Always Sunny in Philadelphia:</h1>
+            <p style="text-align: center"><button onclick="addRandomQuote()">Bird</button></p>
+            <div id="quote-container">
+                <img src="/images/blank.png" class="sunny-image">
+            </div>
         </div>
 
-
         <div id="cat-moods">
-            <h1>Choose your current mood and I'll show you a cat that matches it!</h1>
-            <label for="moods">Choose a mood:</label>
+            <h1 style="text-align: center">Choose your current mood and I'll show you a cat that matches it!</h1>
+            <p style="text-align: center"><label for="moods">Choose a mood:</label>
             <select name="moods" id="moods">
                 <option value="grumpy">Grumpy</option>
                 <option value="melancholy">Melancholy</option>
@@ -115,9 +116,64 @@
                 <option value="distressed">Distressed</option>
                 <option value="indolent">Indolent</option>
             </select>
-            <button onclick="catMood()">Submit</button>  
-            <div id="cat-moods-container"></div>
+            <button onclick="catMood()">Submit</button></p>  
+            <div id="cat-moods-container">
+                <img src="/images/blank.png" class="cat-image">
+            </div>
+        </div>  
+
+        <div id="site-crack">
+            <img src="/images/hole/crack.jpg" onclick=blowUp() style="transform: rotate(90deg)" class="crack-image">
         </div>
-      </div>    
+
+        <form id="comment-form" method="POST" enctype="multipart/form-data" class="hidden">
+            <h2 style="text-align: center">Leave a comment (but don't swear because if you do I'll tell your mom and you'll be in a whole heap of trouble, bub)</h2>
+            <label for="username">Name (optional):</label>   
+            <br>          
+            <input type="text" name="username" style="background-color: #DCDCDC">
+            <br><br>
+            <label for="text-input">Comment:</label>
+            <br>
+            <textarea name="text-input" id="insert-comment" required></textarea>
+            <br>
+            <label for="cat-mood">How are you feeling right now?</label>
+            <select name="cat-mood">
+                <option value="no-mood" selected></option>
+                <option value="grumpy">Grumpy</option>
+                <option value="melancholy">Melancholy</option>
+                <option value="content">Content</option>
+                <option value="distressed">Distressed</option>
+                <option value="indolent">Indolent</option>
+            </select>  
+            <p>Upload an image:</p>
+            <input type="file" name="image">
+            <br><br>
+            <input type="submit" />
+            <br><br>
+        </form>
+
+        <form action="/data" method="POST">
+            <label for="num-comments">Number of comments:</label>
+            <select name="num-comments" id="num-comments" onchange="this.form.submit()">
+                <option value="default" selected></option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+            </select>
+            <br><br>
+        </form>
+
+        <label for="delete-all">This button deletes every comment on the server! Use with caution...</label>
+        <button name="delete-all" onclick="deleteAllComments()">Clear all</button>
+        <br><br>
+        
+        <div id="comment-container"></div>
+
+        <br><br>
+        <form action="/data" method="POST">
+            <button id="load-more" onclick="loadMoreComments()">Load more comments...</button>
+        </form>
+    </div>
   </body>
 </html>
