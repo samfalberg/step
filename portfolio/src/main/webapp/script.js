@@ -91,14 +91,6 @@ function blowUp() {
 }
 
 /**
- * Runs both showComments and fetchBlobstoreUrlAndShowForm on load
- */
-function commentsAndImages() {
-    showComments();
-    fetchBlobstoreUrl();
-}
-
-/**
  * Fetches comment from the server
  */
 function showComments() {
