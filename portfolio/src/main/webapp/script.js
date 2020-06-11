@@ -32,14 +32,19 @@ function addRandomQuote() {
     quotesNoRepeat.splice(quoteNum, 1);
     const imgUrl = 'images/sunny/IASIP-' + quoteNum + '.jpg';
 
+    const quoteElement = document.createElement('p');
+    quoteElement.className = 'quote-element';
+    quoteElement.innerHTML = quote + "\n";
+
     const imgElement = document.createElement('img');
+    imgElement.className = 'sunny-image';
     imgElement.src = imgUrl;
-    imgElement.height = 504;
-    imgElement.width = 884;
+    
 
     // Add them to the page.
     const quoteContainer = document.getElementById('quote-container');
-    quoteContainer.innerText = quote + "\n";
+    quoteContainer.innerHTML = '';
+    quoteContainer.appendChild(quoteElement);
     quoteContainer.appendChild(imgElement);
 }
 
@@ -51,13 +56,11 @@ function catMood() {
     var moods = document.getElementById("moods");
     var moodSelected = moods.options[moods.selectedIndex].value
     
-    //Choose one of two images matching certain mood
-    var imgNum = Math.floor(Math.random() * 2);
-    var imgUrl = 'images/cats/' + moodSelected + '-' + imgNum + '.jpg';
+    //Choose the corresponding cat mood
+    var imgUrl = 'images/cats/' + moodSelected + '-1.jpg';
     var img = document.createElement('img');
+    img.className = 'cat-image';
     img.src = imgUrl;
-    img.height = 500;
-    img.width = 350;
 
     //Add image to page, remove previous one
     const imgContainer = document.getElementById('cat-moods-container');
@@ -75,9 +78,8 @@ function blowUp() {
     explosion.play();
 
     var hole = document.createElement('img');
+    hole.className = 'crack-image';
     hole.src = 'images/hole/hole.png';
-    hole.width = 419;
-    hole.height = 319;
     
     //Add hole in wall, remove crack
     const imgContainer = document.getElementById('site-crack');
@@ -86,7 +88,8 @@ function blowUp() {
 
     //Add text
     const text = document.createElement('p');
-    text.innerText = "\nWhat the heck? You just blew up my website! Not cool...";  
+    text.className = 'crack-text';
+    text.innerHTML = "\nWhat the heck? You just blew up my website! Not cool...";  
     imgContainer.appendChild(text);
 }
 
