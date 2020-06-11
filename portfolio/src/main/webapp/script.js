@@ -241,3 +241,20 @@ function fetchBlobstoreUrl() {
         messageForm.classList.remove('hidden');
       });
 }
+
+function fetchLoginStatus() {
+    fetch('/login-status').then(response => response.json()).then((loginStatus) => {
+        console.log(loginStatus);
+
+        //If logged in, display comments form and logout URL
+        if (loginStatus.isLoggedIn) {
+            var comments = document.getElementById('all-comment-options');
+            comments.style.display = 'block';
+            document.getElementById('logout-url').href = loginStatus.url;
+        } else {   //Else display a login link
+            var login = document.getElementById('login-form');
+            login.style.display = 'block';
+            document.getElementById('login-url').href = loginStatus.url;
+        }
+    });
+}
