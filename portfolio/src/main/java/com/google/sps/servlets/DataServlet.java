@@ -217,9 +217,8 @@ public class DataServlet extends HttpServlet {
             String commentId = (String) commentEntity.getProperty("userId");
 
             //If the user id matches the comment's id, then it is the user's comment
-            if (commentId.equals(userId)) {
-                return true;
-            } 
+            return commentId.equals(userId);
+
        } catch (EntityNotFoundException e) {
             System.out.println("Entity not found");
        }
