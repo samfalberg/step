@@ -86,7 +86,16 @@ public class DataServlet extends HttpServlet {
         String imageUrl = (String) entity.getProperty("imageUrl");
         boolean myComment = isMyComment(id);
 
-        Comment comment = new Comment(id, timestamp, name, email, message, mood, imageUrl, myComment);
+        Comment comment = new Comment.Builder()
+                                    .setId(id)
+                                    .setTimestamp(timestamp)
+                                    .setName(name)
+                                    .setEmail(email)
+                                    .setMessage(message)
+                                    .setMood(mood)
+                                    .setImageUrl(imageUrl)
+                                    .setMyComment(myComment)
+                                    .build();
         comments.add(comment);
     }
     
