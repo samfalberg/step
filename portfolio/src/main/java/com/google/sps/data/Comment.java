@@ -26,7 +26,8 @@ public class Comment {
     private String imageUrl;
     private boolean myComment;
 
-    public Comment(long id, long timestamp, String name, String email, String message, String mood, String imageUrl, boolean myComment) {
+    public Comment(long id, long timestamp, String name, String email, String message, 
+    String mood, String imageUrl, boolean myComment) {
         this.id = id;
         this.timestamp = timestamp;
         this.name = name;
@@ -35,5 +36,64 @@ public class Comment {
         this.mood = mood;
         this.imageUrl = imageUrl;
         this.myComment = myComment;
+    }
+
+    /* Builder class for the comment*/
+    public static class Builder {
+
+        private long id;
+        private long timestamp;
+        private String name;
+        private String email;
+        private String message;
+        private String mood;
+        private String imageUrl;
+        private boolean myComment;
+
+        public Builder(){}
+
+        public Builder setId(long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setTimestamp(long timestamp) {
+            this.timestamp = timestamp;
+            return this;
+        }
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder setMessage(String message) {
+            this.message = message;
+            return this;
+        }
+
+        public Builder setMood(String mood) {
+            this.mood = mood;
+            return this;
+        }
+
+        public Builder setImageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
+            return this;
+        }
+
+        public Builder setMyComment(boolean myComment) {
+            this.myComment = myComment;
+            return this;
+        }
+
+        public Comment build() {
+            return new Comment(id, timestamp, name, email, message, mood, imageUrl, myComment);
+        }
     }
 }
