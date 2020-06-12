@@ -20,16 +20,20 @@ public class Comment {
     private long id;
     private long timestamp;
     private String name;
+    private String email;
     private String message;
     private String mood;
     private String imageUrl;
+    private boolean myComment;
 
-    public Comment(long id, long timestamp, String name, String message, String mood, String imageUrl) {
+    public Comment(long id, long timestamp, String name, String email, String message, String mood, String imageUrl, boolean myComment) {
         this.id = id;
         this.timestamp = timestamp;
         this.name = name;
+        this.email = email;
         this.message = message;
         this.mood = mood;
         this.imageUrl = imageUrl;
+        this.myComment = myComment;
     }
 }

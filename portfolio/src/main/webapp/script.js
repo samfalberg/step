@@ -94,14 +94,6 @@ function blowUp() {
 }
 
 /**
- * Runs both showComments and fetchBlobstoreUrlAndShowForm on load
- */
-function commentsAndImages() {
-    showComments();
-    fetchBlobstoreUrl();
-}
-
-/**
  * Fetches comment from the server
  */
 function showComments() {
@@ -152,28 +144,30 @@ function createComment(comment) {
         commentImage.src = comment.imageUrl;
      }
 
-     //Add delete button
-     const deleteButton = document.createElement('button');
-     deleteButton.innerText = 'Delete';
-     deleteButton.className = 'delete-button';
-     deleteButton.addEventListener('click', () => {
-         try {
-            deleteComment(comment);
-         }
-         catch(err) {
-            document.getElementById('comment-container').innerHTML = err.message;
-         }
-
-         commentBox.remove();
-     })
-
      commentBox.appendChild(commentName);
      commentBox.appendChild(commentMood);
      commentBox.appendChild(commentMoodImage);
      commentBox.appendChild(commentTimestamp);
      commentBox.appendChild(commentMessage);
      commentBox.appendChild(commentImage);
-     commentBox.appendChild(deleteButton);
+
+     //Add delete button if comment belongs to user
+     if (comment.myComment) {
+        const deleteButton = document.createElement('button');
+        deleteButton.innerText = 'Delete';
+        deleteButton.className = 'delete-button';
+        deleteButton.addEventListener('click', () => {
+            try {
+                deleteComment(comment);
+            }
+            catch(err) {
+                document.getElementById('comment-container').innerHTML = err.message;
+            }
+
+            commentBox.remove();
+        })
+        commentBox.appendChild(deleteButton);
+     }
 
      return commentBox;
  }
@@ -251,4 +245,21 @@ function fetchBlobstoreUrl() {
         messageForm.action = imageUploadUrl;
         messageForm.classList.remove('hidden');
       });
+}
+
+function fetchLoginStatus() {
+    fetch('/login-status').then(response => response.json()).then((loginStatus) => {
+        console.log(loginStatus);
+
+        //If logged in, display comments form and logout URL
+        if (loginStatus.isLoggedIn) {
+            var comments = document.getElementById('all-comment-options');
+            comments.style.display = 'block';
+            document.getElementById('logout-url').href = loginStatus.url;
+        } else {   //Else display a login link
+            var login = document.getElementById('login-form');
+            login.style.display = 'block';
+            document.getElementById('login-url').href = loginStatus.url;
+        }
+    });
 }

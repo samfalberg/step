@@ -35,12 +35,17 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
@@ -75,11 +80,13 @@ public class DataServlet extends HttpServlet {
         long id = entity.getKey().getId();
         long timestamp = (long) entity.getProperty("timestamp");
         String name = (String) entity.getProperty("name");
+        String email = (String) entity.getProperty("email");
         String message = (String) entity.getProperty("message");
         String mood = (String) entity.getProperty("mood");
         String imageUrl = (String) entity.getProperty("imageUrl");
+        boolean myComment = isMyComment(id);
 
-        Comment comment = new Comment(id, timestamp, name, message, mood, imageUrl);
+        Comment comment = new Comment(id, timestamp, name, email, message, mood, imageUrl, myComment);
         comments.add(comment);
     }
     
@@ -111,10 +118,13 @@ public class DataServlet extends HttpServlet {
             maxComments = numCommentsToInt;
         }
     }
-    
+
     //Get input from comment form
     long timestamp = System.currentTimeMillis();
     String name = getParameter(request, "username").orElse("Anonymous User");
+    UserService userService = UserServiceFactory.getUserService();
+    String email = userService.getCurrentUser().getEmail();
+    String userId = userService.getCurrentUser().getUserId();
     String message = getParameter(request, "text-input").orElse(null);
     String mood = getParameter(request, "cat-mood").orElse(null);
     String imageUrl = getUploadedFileUrl(request, "image");
@@ -122,8 +132,10 @@ public class DataServlet extends HttpServlet {
     if (message != null) {
         Entity commentEntity = new Entity("Comment");
         commentEntity.setProperty("timestamp", timestamp);
-        commentEntity.setProperty("message", message);
         commentEntity.setProperty("name", name);
+        commentEntity.setProperty("email", email);
+        commentEntity.setProperty("userId", userId);
+        commentEntity.setProperty("message", message);
         commentEntity.setProperty("mood", mood);
         commentEntity.setProperty("imageUrl", imageUrl);
 
@@ -182,5 +194,36 @@ public class DataServlet extends HttpServlet {
         } catch (MalformedURLException e) {
             return imagesService.getServingUrl(options);
         }
-  }
+   }
+
+  /**
+   * Says if a comment belongs to the currently signed-in user
+   * @return boolean
+   */
+   private boolean isMyComment(long id) {
+       UserService userService = UserServiceFactory.getUserService();
+
+       if (!userService.isUserLoggedIn()) {
+           return false;
+       }
+       
+       String userId = userService.getCurrentUser().getUserId();
+       Key commentEntityKey = KeyFactory.createKey("Comment", id);
+       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+       
+       try {
+            Entity commentEntity = datastore.get(commentEntityKey);
+
+            String commentId = (String) commentEntity.getProperty("userId");
+
+            //If the user id matches the comment's id, then it is the user's comment
+            if (commentId.equals(userId)) {
+                return true;
+            } 
+       } catch (EntityNotFoundException e) {
+            System.out.println("Entity not found");
+       }
+
+       return false;
+   }
 }
