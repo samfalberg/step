@@ -23,18 +23,18 @@ public class Comment {
     private String email;
     private String message;
     private String mood;
-    private String imageUrl;
+    private String blobKey;
     private boolean myComment;
 
     public Comment(long id, long timestamp, String name, String email, String message, 
-    String mood, String imageUrl, boolean myComment) {
+    String mood, String blobKey, boolean myComment) {
         this.id = id;
         this.timestamp = timestamp;
         this.name = name;
         this.email = email;
         this.message = message;
         this.mood = mood;
-        this.imageUrl = imageUrl;
+        this.blobKey = blobKey;
         this.myComment = myComment;
     }
 
@@ -47,7 +47,7 @@ public class Comment {
         private String email;
         private String message;
         private String mood;
-        private String imageUrl;
+        private String blobKey;
         private boolean myComment;
 
         public Builder(){}
@@ -82,8 +82,8 @@ public class Comment {
             return this;
         }
 
-        public Builder setImageUrl(String imageUrl) {
-            this.imageUrl = imageUrl;
+        public Builder setBlobKey(String blobKey) {
+            this.blobKey = blobKey;
             return this;
         }
 
@@ -93,7 +93,7 @@ public class Comment {
         }
 
         public Comment build() {
-            return new Comment(id, timestamp, name, email, message, mood, imageUrl, myComment);
+            return new Comment(id, timestamp, name, email, message, mood, blobKey, myComment);
         }
     }
 }
