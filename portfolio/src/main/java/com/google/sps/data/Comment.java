@@ -23,17 +23,77 @@ public class Comment {
     private String email;
     private String message;
     private String mood;
-    private String imageUrl;
+    private String blobKey;
     private boolean myComment;
 
-    public Comment(long id, long timestamp, String name, String email, String message, String mood, String imageUrl, boolean myComment) {
+    public Comment(long id, long timestamp, String name, String email, String message, 
+    String mood, String blobKey, boolean myComment) {
         this.id = id;
         this.timestamp = timestamp;
         this.name = name;
         this.email = email;
         this.message = message;
         this.mood = mood;
-        this.imageUrl = imageUrl;
+        this.blobKey = blobKey;
         this.myComment = myComment;
+    }
+
+    /* Builder class for the comment*/
+    public static class Builder {
+
+        private long id;
+        private long timestamp;
+        private String name;
+        private String email;
+        private String message;
+        private String mood;
+        private String blobKey;
+        private boolean myComment;
+
+        public Builder(){}
+
+        public Builder setId(long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setTimestamp(long timestamp) {
+            this.timestamp = timestamp;
+            return this;
+        }
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder setMessage(String message) {
+            this.message = message;
+            return this;
+        }
+
+        public Builder setMood(String mood) {
+            this.mood = mood;
+            return this;
+        }
+
+        public Builder setBlobKey(String blobKey) {
+            this.blobKey = blobKey;
+            return this;
+        }
+
+        public Builder setMyComment(boolean myComment) {
+            this.myComment = myComment;
+            return this;
+        }
+
+        public Comment build() {
+            return new Comment(id, timestamp, name, email, message, mood, blobKey, myComment);
+        }
     }
 }
