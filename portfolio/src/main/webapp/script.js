@@ -99,7 +99,19 @@ function blowUp() {
 function showComments() {
     fetch('/data').then(response => response.json()).then((comments) => {
         comments.forEach((comment) => {
-            document.getElementById('comment-container').appendChild(createComment(comment));
+            const blobImage = document.createElement('img');
+            blobImage.className = 'comment-img';
+
+            //If user submitted a file, fetch the served blob
+            if (comment.blobKey != null) {
+                const request = new Request('/blobstore-serve?blob-key=' + comment.blobKey);
+                
+                fetch(request).then(response => response.blob()).then((blob) => {
+                    blobImage.src = window.URL.createObjectURL(blob);
+                })
+            }
+
+            document.getElementById('comment-container').appendChild(createComment(comment, blobImage));
         })
         console.log(comments);
     });
@@ -108,7 +120,7 @@ function showComments() {
 /**
  * Displays comment message, timestamp, and id
  */
-function createComment(comment) {
+function createComment(comment, commentImage) {
      //Box for each comment
      const commentBox = document.createElement('div');
      commentBox.className = 'comment'; 
@@ -136,13 +148,6 @@ function createComment(comment) {
      //Add message
      const commentMessage = document.createElement('p');
      commentMessage.innerHTML = comment.message;
-
-     //Add user-submitted image
-     const commentImage = document.createElement('img');
-     if (comment.imageUrl != null) {
-        commentImage.className = 'comment-img'
-        commentImage.src = comment.imageUrl;
-     }
 
      commentBox.appendChild(commentName);
      commentBox.appendChild(commentMood);
