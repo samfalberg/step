@@ -19,8 +19,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -41,9 +39,6 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.appengine.api.images.ImagesService;
-import com.google.appengine.api.images.ImagesServiceFactory;
-import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
@@ -83,7 +78,7 @@ public class DataServlet extends HttpServlet {
         String email = (String) entity.getProperty("email");
         String message = (String) entity.getProperty("message");
         String mood = (String) entity.getProperty("mood");
-        String imageUrl = (String) entity.getProperty("imageUrl");
+        String blobKey = (String) entity.getProperty("blobKey");
         boolean myComment = isMyComment(id);
 
         Comment comment = new Comment.Builder()
@@ -93,7 +88,7 @@ public class DataServlet extends HttpServlet {
                                     .setEmail(email)
                                     .setMessage(message)
                                     .setMood(mood)
-                                    .setImageUrl(imageUrl)
+                                    .setBlobKey(blobKey)
                                     .setMyComment(myComment)
                                     .build();
         comments.add(comment);
@@ -136,7 +131,7 @@ public class DataServlet extends HttpServlet {
     String userId = userService.getCurrentUser().getUserId();
     String message = getParameter(request, "text-input").orElse(null);
     String mood = getParameter(request, "cat-mood").orElse(null);
-    String imageUrl = getUploadedFileUrl(request, "image");
+    String blobKey = getBlobKey(request, "image");
     
     if (message != null) {
         Entity commentEntity = new Entity("Comment");
@@ -146,7 +141,7 @@ public class DataServlet extends HttpServlet {
         commentEntity.setProperty("userId", userId);
         commentEntity.setProperty("message", message);
         commentEntity.setProperty("mood", mood);
-        commentEntity.setProperty("imageUrl", imageUrl);
+        commentEntity.setProperty("blobKey", blobKey);
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(commentEntity);
@@ -167,42 +162,28 @@ public class DataServlet extends HttpServlet {
        return Optional.ofNullable(value);
    }
 
-   /** Returns a URL that points to the uploaded file, or null if the user didn't upload a file. */
-   private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName) {
+   /** Returns the blob key for the user-uploaded file */
+   private String getBlobKey(HttpServletRequest request, String name) {
         BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
         Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
-        List<BlobKey> blobKeys = blobs.get(formInputElementName);
+        List<BlobKey> blobKeys = blobs.get(name);
 
         // User submitted form without selecting a file, so we can't get a URL. (dev server)
         if (blobKeys == null || blobKeys.isEmpty()) {
             return null;
-        }
+        } 
 
-        // Our form only contains a single file input, so get the first index.
-        BlobKey blobKey = blobKeys.get(0);
+        // Form only contains a single file input, so get the first index.
+        String blobKey = blobKeys.get(0).getKeyString();
 
         // User submitted form without selecting a file, so we can't get a URL. (live server)
-        BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+        BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKeys.get(0));
         if (blobInfo.getSize() == 0) {
-            blobstoreService.delete(blobKey);
+            blobstoreService.delete(blobKeys.get(0));
             return null;
         }
 
-        // We could check the validity of the file here, e.g. to make sure it's an image file
-        // https://stackoverflow.com/q/10779564/873165
-
-        // Use ImagesService to get a URL that points to the uploaded file.
-        ImagesService imagesService = ImagesServiceFactory.getImagesService();
-        ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
-
-        // To support running in Google Cloud Shell with AppEngine's dev server, we must use the relative
-        // path to the image, rather than the path returned by imagesService which contains a host.
-        try {
-            URL url = new URL(imagesService.getServingUrl(options));
-            return url.getPath();
-        } catch (MalformedURLException e) {
-            return imagesService.getServingUrl(options);
-        }
+        return blobKey;        
    }
 
   /**
