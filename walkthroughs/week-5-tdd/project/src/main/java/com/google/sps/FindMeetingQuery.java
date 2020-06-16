@@ -14,10 +14,72 @@
 
 package com.google.sps;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    throw new UnsupportedOperationException("TODO: Implement this method.");
+    Collection<TimeRange> findMeeting = new ArrayList<TimeRange>();
+    
+    ArrayList<Event> eventsList = new ArrayList<Event>();
+    boolean isAttending = false;
+    for (Event event : events) {
+        eventsList.add(event);
+
+        //Check if anybody we're scheduling is attending any of the events
+        for (String attendent : request.getAttendees()) {
+            if (event.getAttendees().contains(attendent)) {
+                isAttending = true;
+                break;
+            }
+        }
+    }
+    
+    //List of events ordered by start time
+    ArrayList<Event> startTimeEventsList = new ArrayList<Event>(eventsList);
+    Collections.sort(startTimeEventsList, Event.ORDER_BY_START);
+
+    //List of events ordered by end time
+    ArrayList<Event> endTimeEventsList = new ArrayList<Event>(eventsList);
+    Collections.sort(endTimeEventsList, Event.ORDER_BY_END);
+
+    //Only add events that are shorter than the entire day
+    if (request.getDuration() < TimeRange.WHOLE_DAY.duration()) {
+
+        //If there are no events, or we're scheduling for people not attending, the whole day is free
+        if (events.isEmpty() || !isAttending) {
+            findMeeting.add(TimeRange.WHOLE_DAY);
+        } else {   //If there's a valid event, make time range from start til first event
+            findMeeting.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, startTimeEventsList.get(0).getWhen().start(), false));
+
+            //If there's more than one event, and they don't overlap, get the time between them
+            if (eventsList.size() > 1) {
+                for (int i = 0; i < eventsList.size() - 1; i++) {
+                    if (!eventsList.get(i).getWhen().overlaps(eventsList.get(i+1).getWhen())) {
+                        findMeeting.add(TimeRange.fromStartEnd(eventsList.get(i).getWhen().end(), eventsList.get(i+1).getWhen().start(), false));
+                    }
+                }
+            }
+
+            //Make time range from end of last events til end of day
+            findMeeting.add(TimeRange.fromStartEnd(endTimeEventsList.get(events.size() - 1).getWhen().end(), TimeRange.END_OF_DAY, true));
+        }
+    }
+
+    //Remove all time ranges that are less than the required meeting duration
+    Iterator<TimeRange> timeRange = findMeeting.iterator();
+    while (timeRange.hasNext()) {
+        TimeRange current = timeRange.next();
+
+        if (current.duration() < request.getDuration()) {
+            timeRange.remove();
+        }
+    }
+
+    return findMeeting;
   }
 }
