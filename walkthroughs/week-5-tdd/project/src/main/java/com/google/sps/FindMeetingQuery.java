@@ -28,25 +28,33 @@ public final class FindMeetingQuery {
     
     ArrayList<Event> eventsList = new ArrayList<Event>();
     boolean isAttending = false;
-    for (Event event : events) {
-        eventsList.add(event);
+    int totalEventTime = 0;
 
-        //Check if anybody we're scheduling is attending any of the events
+    for (Event event : events) {
+        //Check if any mandatory attendees we're scheduling is attending any of the events
         for (String attendent : request.getAttendees()) {
             if (event.getAttendees().contains(attendent)) {
                 isAttending = true;
                 break;
             }
         }
-    }
-    
-    //List of events ordered by start time
-    ArrayList<Event> startTimeEventsList = new ArrayList<Event>(eventsList);
-    Collections.sort(startTimeEventsList, Event.ORDER_BY_START);
 
-    //List of events ordered by end time
-    ArrayList<Event> endTimeEventsList = new ArrayList<Event>(eventsList);
-    Collections.sort(endTimeEventsList, Event.ORDER_BY_END);
+        //Check if any optional attendees we're scheduling is attending any of the events
+        for (String optionalAttendent : request.getOptionalAttendees()) {
+            if (event.getAttendees().contains(optionalAttendent)) {
+                isAttending = true;
+                break;
+            }
+        }
+
+        //Don't add event if it's too long to allow a meeting and only has optionals
+        if (event.getWhen().duration() + request.getDuration() > TimeRange.WHOLE_DAY.duration() && hasOnlyOptionals(event, request)) {
+            continue;
+        }
+
+        eventsList.add(event);
+        totalEventTime += event.getWhen().duration();
+    }
 
     //Return empty list if meeting is longer than entire day
     if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
@@ -58,26 +66,78 @@ public final class FindMeetingQuery {
         findMeeting.add(TimeRange.WHOLE_DAY);
         return findMeeting;
     } 
+
+    //The only events have optional attendees with no gaps in their schedules
+    if (eventsList.isEmpty()) {
+        return findMeeting;
+    }
     
+    //List of events ordered by start time
+    ArrayList<Event> startTimeEventsList = new ArrayList<Event>(eventsList);
+    Collections.sort(startTimeEventsList, Event.ORDER_BY_START);
+
+    //List of events ordered by end time
+    ArrayList<Event> endTimeEventsList = new ArrayList<Event>(eventsList);
+    Collections.sort(endTimeEventsList, Event.ORDER_BY_END);
+
     //There's a valid event, so make time range from start til first event
     findMeeting.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, startTimeEventsList.get(0).getWhen().start(), false));
 
     //If there's more than one event, and they don't overlap, get the time between them
-    if (eventsList.size() > 1) {
-        for (int i = 0; i < eventsList.size() - 1; i++) {
-            if (!eventsList.get(i).getWhen().overlaps(eventsList.get(i+1).getWhen())) {
-                findMeeting.add(TimeRange.fromStartEnd(eventsList.get(i).getWhen().end(), eventsList.get(i+1).getWhen().start(), false));
+    if (startTimeEventsList.size() > 1) {
+        
+        for (int i = 0; i < startTimeEventsList.size() - 1; i++) {
+            
+            if (!startTimeEventsList.get(i).getWhen().overlaps(startTimeEventsList.get(i+1).getWhen())) {
+                
+                int currentEventEnd = startTimeEventsList.get(i).getWhen().end();
+                int nextEventStart = startTimeEventsList.get(i+1).getWhen().start();
+                
+                findMeeting.add(TimeRange.fromStartEnd(currentEventEnd, nextEventStart, false));
+
+                //Optional-only event has made it so there isn't enough time for meeting
+                //Previous time range will get deleted in lines 117-120, add correct time range here
+                if (hasOnlyOptionals(startTimeEventsList.get(i), request) && 
+                    (totalEventTime + request.getDuration()) > TimeRange.WHOLE_DAY.duration()) {
+                    //If it's the first element of the list, time range must start at beginning of day
+                    int previousEventEnd = TimeRange.START_OF_DAY;
+                    if (i > 0) {
+                        previousEventEnd = startTimeEventsList.get(i - 1).getWhen().end();
+                    }
+                    findMeeting.add(TimeRange.fromStartEnd(previousEventEnd, nextEventStart, false));
+                }
             }
         }
     }
 
     //Make time range from end of last events til end of day
-    findMeeting.add(TimeRange.fromStartEnd(endTimeEventsList.get(events.size() - 1).getWhen().end(), TimeRange.END_OF_DAY, true));
+    findMeeting.add(TimeRange.fromStartEnd(endTimeEventsList.get(eventsList.size() - 1).getWhen().end(), TimeRange.END_OF_DAY, true));
 
     //Remove all time ranges that are less than required meeting duration, return resulting list
     return findMeeting
             .stream()
             .filter(meeting -> meeting.duration() >= request.getDuration())
             .collect(Collectors.toList());
+  }
+
+  /**
+   * Checks if an event is attended only by optionals
+   */
+  public boolean hasOnlyOptionals(Event event, MeetingRequest request) {
+    Iterator<String> iterator = request.getAttendees().iterator();
+
+    while (iterator.hasNext()) {
+        //Event has mandatory attendees
+        if (event.getAttendees().contains(iterator.next())) {
+            return false;
+        }
+    }
+
+    //Event has optional attendees
+    if (event.getAttendees().size() > 0) {
+        return true;
+    }
+
+    return false;
   }
 }
