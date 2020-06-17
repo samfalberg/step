@@ -334,7 +334,7 @@ public final class FindMeetingQueryTest {
 
   @Test
   public void justEnoughRoomWithOptional() {
-    // Have one atendee and one optional attendee, but make it so that there is just enough 
+    // Have one attendee and one optional attendee, but make it so that there is just enough 
     // room at one point in the day to have the meeting.
     //
     // Events  : |--A--|     |----A----|
