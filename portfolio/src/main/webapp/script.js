@@ -234,12 +234,31 @@ function deleteAllComments() {
  */
 function loadMoreComments() {
     fetch('/data?load-more=5').then(response => response.json()).then((comments) => {
+        //Clear comment container so comments don't appear twice
+        const commentContainer = document.getElementById('comment-container');
+        commentContainer.innerHTML = '';
+
         comments.forEach((comment) => {
-            document.getElementById('comment-container').appendChild(createComment(comment));
+            const blobImage = document.createElement('img');
+            blobImage.className = 'comment-img';
+
+            //If user submitted a file, fetch the served blob
+            if (comment.blobKey != null) {
+                const request = new Request('/blobstore-serve?blob-key=' + comment.blobKey);
+                
+                fetch(request).then(response => response.blob()).then((blob) => {
+                    blobImage.src = window.URL.createObjectURL(blob);
+                })
+            }
+            commentContainer.appendChild(createComment(comment, blobImage));
         })
     });
 }
 
+
+/**
+ * Set comment form action to blobstore upload URL
+ */
 function fetchBlobstoreUrl() {
     fetch('/blobstore-upload-url')
       .then((response) => {
@@ -249,9 +268,20 @@ function fetchBlobstoreUrl() {
         const messageForm = document.getElementById('comment-form');
         messageForm.action = imageUploadUrl;
         messageForm.classList.remove('hidden');
+
+        const numCommentsForm = document.getElementById('num-comments-form');
+        numCommentsForm.action = imageUploadUrl;
+        numCommentsForm.classList.remove('hidden');
+
+        const loadForm = document.getElementById('load-more-form');
+        loadForm.action = imageUploadUrl;
+        loadForm.classList.remove('hidden');
       });
 }
 
+/**
+ * Check if user is logged in. If they're not, display login form. If they are, display logout form
+ */
 function fetchLoginStatus() {
     fetch('/login-status').then(response => response.json()).then((loginStatus) => {
         console.log(loginStatus);
