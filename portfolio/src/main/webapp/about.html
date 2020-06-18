@@ -91,7 +91,7 @@
                 <br><br>
             </form>
 
-            <form action="/data" method="POST">
+            <form id="num-comments-form" method="POST" enctype="multipart/form-data" class="hidden">
                 <label for="num-comments">Number of comments:</label>
                 <select name="num-comments" id="num-comments" onchange="this.form.submit()">
                     <option value="default" selected></option>
@@ -116,8 +116,8 @@
         <div id="comment-container"></div>
 
         <br><br>
-        <form action="/data" method="POST">
-            <button id="load-more" onclick="loadMoreComments()">Load more comments...</button>
+        <form id="load-more-form" method="POST" enctype="multipart/form-data" class="hidden">
+            <button id="load-more" name="load-more" onclick="loadMoreComments()">Load more comments...</button>
         </form>
     </div>
   </body>
