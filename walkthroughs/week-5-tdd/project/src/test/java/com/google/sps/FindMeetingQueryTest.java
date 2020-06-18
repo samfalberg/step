@@ -35,6 +35,7 @@ public final class FindMeetingQueryTest {
   private static final String PERSON_A = "Person A";
   private static final String PERSON_B = "Person B";
   private static final String PERSON_C = "Person C";
+  private static final String PERSON_D = "Person D";
 
   // All dates are the first day of the year 2020.
   private static final int TIME_0800AM = TimeRange.getTimeInMinutes(8, 0);
@@ -407,6 +408,38 @@ public final class FindMeetingQueryTest {
 
     Collection<TimeRange> actual = query.query(events, request);
     Collection<TimeRange> expected = Arrays.asList();
+
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void maxOptionalAttendance() {
+    // If no time exists for all optional and mandatory attendees, find the time slot(s) that
+    // allow mandatory attendees and the greatest possible number of optional attendees to attend.
+    // In this example, PERSON_A and PERSON_D can attend a meeting between 8:00AM and 9:00AM.
+    // However, PERSON_A, PERSON_B, and PERSON_C can attend a meeting anytime after 9:00AM.
+    // So a time range of 9:00AM to the end of the day is returned
+
+    Collection<Event> events = Arrays.asList(
+        new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0800AM, false),
+            Arrays.asList(PERSON_A)),
+        new Event("Event 1", TimeRange.fromStartDuration(TIME_0800AM, DURATION_30_MINUTES),
+            Arrays.asList(PERSON_B)),
+        new Event("Event 1", TimeRange.fromStartDuration(TIME_0830AM, DURATION_30_MINUTES),
+            Arrays.asList(PERSON_C)),
+        new Event("Event 1", TimeRange.fromStartEnd(TIME_0900AM, TimeRange.END_OF_DAY, true),
+            Arrays.asList(PERSON_D)));
+
+    MeetingRequest request = new MeetingRequest(Arrays.asList(), DURATION_60_MINUTES);
+
+    request.addOptionalAttendee(PERSON_B);
+    request.addOptionalAttendee(PERSON_C);
+    request.addOptionalAttendee(PERSON_D);
+
+    Collection<TimeRange> actual = query.query(events, request);
+    Collection<TimeRange> expected = 
+        Arrays.asList(
+            TimeRange.fromStartEnd(TIME_0900AM, TimeRange.END_OF_DAY, true));
 
     Assert.assertEquals(expected, actual);
   }
